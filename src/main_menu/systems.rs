@@ -59,6 +59,13 @@ pub fn despawn_main_menu(mut commands: Commands, main_menu_query: Query<Entity, 
     }
 }
 
+/// System determining button behavior
+/// 
+/// # Arguments
+/// 
+/// * `commands` - List of commands for interacting with the `World`.
+/// * `next_app_state` - Mutable next app state resource.
+/// * `app_exit_event_writer` - Mutable app exit event writer.
 pub fn button_interaction(
     mut button_query: Query<
         (&Interaction, &mut BackgroundColor, &MenuButton),
