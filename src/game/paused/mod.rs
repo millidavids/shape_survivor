@@ -1,8 +1,6 @@
 mod components;
 mod systems;
-mod states;
 mod styles;
-mod resources;
 
 use bevy::prelude::*;
 
