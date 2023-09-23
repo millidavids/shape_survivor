@@ -1,23 +1,18 @@
-use bevy::{app::AppExit, prelude::*};
+use bevy::prelude::*;
 
-use crate::states::AppState;
+use crate::game::states::GameState;
 
-use super::{
-    components::{MainMenu, MainMenuButton},
-    styles::{
-        get_button_text, HOVERED_BUTTON_COLOR, MAIN_MENU_STYLE, NORMAL_BUTTON_COLOR,
-        NORMAL_BUTTON_STYLE, PRESSED_BUTTON_COLOR,
-    },
-};
+use super::styles::{MAIN_MENU_STYLE, NORMAL_BUTTON_STYLE, get_button_text, PRESSED_BUTTON_COLOR, HOVERED_BUTTON_COLOR, NORMAL_BUTTON_COLOR};
+use super::components::{PauseMenu, PauseMenuButton};
 
-pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn((
             NodeBundle {
                 style: MAIN_MENU_STYLE,
                 ..default()
             },
-            MainMenu {},
+            PauseMenu {},
         ))
         .with_children(|parent| {
             // ---- Play Button ----
@@ -27,11 +22,11 @@ pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
                         style: NORMAL_BUTTON_STYLE,
                         ..default()
                     },
-                    MainMenuButton::Play,
+                    PauseMenuButton::Running,
                 ))
                 .with_children(|parent| {
                     parent.spawn(TextBundle {
-                        text: get_button_text(&asset_server, "Play"),
+                        text: get_button_text(&asset_server, "Resume"),
                         ..default()
                     });
                 });
@@ -42,20 +37,20 @@ pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
                         style: NORMAL_BUTTON_STYLE,
                         ..default()
                     },
-                    MainMenuButton::Quit,
+                    PauseMenuButton::MainMenu,
                 ))
                 .with_children(|parent| {
                     parent.spawn(TextBundle {
-                        text: get_button_text(&asset_server, "Quit"),
+                        text: get_button_text(&asset_server, "Main Menu"),
                         ..default()
                     });
                 });
         });
 }
 
-pub fn despawn_main_menu(mut commands: Commands, main_menu_query: Query<Entity, With<MainMenu>>) {
-    if let Ok(main_menu_entity) = main_menu_query.get_single() {
-        commands.entity(main_menu_entity).despawn_recursive();
+pub fn despawn_pause_menu(mut commands: Commands, pause_menu_query: Query<Entity, With<PauseMenu>>) {
+    if let Ok(pause_menu_entity) = pause_menu_query.get_single() {
+        commands.entity(pause_menu_entity).despawn_recursive();
     }
 }
 
@@ -68,21 +63,20 @@ pub fn despawn_main_menu(mut commands: Commands, main_menu_query: Query<Entity, 
 /// * `app_exit_event_writer` - Mutable app exit event writer.
 pub fn button_interaction(
     mut button_query: Query<
-        (&Interaction, &mut BackgroundColor, &MainMenuButton),
+        (&Interaction, &mut BackgroundColor, &PauseMenuButton),
         Changed<Interaction>,
     >,
-    mut next_app_state: ResMut<NextState<AppState>>,
-    mut app_exit_event_writer: EventWriter<AppExit>,
+    mut next_game_state: ResMut<NextState<GameState>>,
 ) {
-    for (interaction, mut background_color, menu_button_option) in button_query.iter_mut() {
-        match (*interaction, menu_button_option) {
-            (Interaction::Pressed, MainMenuButton::Play) => {
+    for (interaction, mut background_color, pause_button_option) in button_query.iter_mut() {
+        match (*interaction, pause_button_option) {
+            (Interaction::Pressed, PauseMenuButton::Running) => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
-                next_app_state.set(AppState::Game);
+                next_game_state.set(GameState::Running);
             }
-            (Interaction::Pressed, MainMenuButton::Quit) => {
+            (Interaction::Pressed, PauseMenuButton::MainMenu) => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
-                app_exit_event_writer.send(AppExit);
+                next_game_state.set(GameState::Inactive);
             }
             (Interaction::Hovered, _) => *background_color = HOVERED_BUTTON_COLOR.into(),
             _ => *background_color = NORMAL_BUTTON_COLOR.into(),

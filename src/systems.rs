@@ -1,6 +1,6 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use crate::states::AppState;
+use super::states::AppState;
 
 pub fn spawn_camera(mut commands: Commands, window_query: Query<&Window, With<PrimaryWindow>>) {
     let window = window_query.get_single().unwrap();
@@ -11,15 +11,21 @@ pub fn spawn_camera(mut commands: Commands, window_query: Query<&Window, With<Pr
     });
 }
 
-pub fn toggle_game_state(
+pub fn toggle_app_state(
     keyboard_input: Res<Input<KeyCode>>,
-    current_game_state: Res<State<AppState>>,
+    current_app_state: Res<State<AppState>>,
     mut next_app_state: ResMut<NextState<AppState>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::M) {
-        match *current_game_state.get() {
+        match *current_app_state.get() {
             AppState::MainMenu => next_app_state.set(AppState::Game),
             AppState::Game => next_app_state.set(AppState::MainMenu),
         }
     }
+}
+
+pub fn push_main_menu(
+    mut next_app_state: ResMut<NextState<AppState>>,
+) {
+    next_app_state.set(AppState::MainMenu);
 }

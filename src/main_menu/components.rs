@@ -4,7 +4,7 @@ use bevy::prelude::Component;
 pub struct MainMenu;
 
 #[derive(Component)]
-pub enum MenuButton {
+pub enum MainMenuButton {
     Play,
     Quit,
 }
