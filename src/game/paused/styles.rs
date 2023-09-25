@@ -26,7 +26,7 @@ pub const NORMAL_BUTTON_STYLE: Style = {
 };
 
 pub fn get_button_text(asset_server: &Res<AssetServer>, text: &str) -> Text {
-    get_text(asset_server, text, 32.0)
+    get_text(asset_server, text, 48.0)
 }
 
 fn get_text(asset_server: &Res<AssetServer>, text: &str, font_size: f32) -> Text {
@@ -34,7 +34,7 @@ fn get_text(asset_server: &Res<AssetServer>, text: &str, font_size: f32) -> Text
         sections: vec![TextSection::new(
             text,
             TextStyle {
-                font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+                font: asset_server.load("fonts/Davidfont.otf"),
                 font_size: font_size,
                 color: Color::Hsla {
                     hue: 0.0,
