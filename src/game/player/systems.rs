@@ -3,6 +3,8 @@ use bevy::window::PrimaryWindow;
 
 use super::components::*;
 
+use crate::game::components::{AnimationIndices, AnimationTimer};
+
 pub fn spawn_player(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
@@ -15,7 +17,7 @@ pub fn spawn_player(
     let texture_atlas =
         TextureAtlas::from_grid(texture_handle, Vec2::new(64.0, 64.0), 4, 1, None, None);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
-    let animation_indices = AnimationIndices { first: 0, last: 3 };
+    let animation_indices = AnimationIndices { first: 0, last: 3, reverse: false };
 
     commands.spawn((
         Player {},
@@ -43,21 +45,17 @@ pub fn animate_player(
     time: Res<Time>,
     mut query: Query<
         (
-            &AnimationIndices,
+            &mut AnimationIndices,
             &mut AnimationTimer,
             &mut TextureAtlasSprite,
         ),
         With<Player>,
     >,
 ) {
-    for (indices, mut timer, mut sprite) in &mut query {
+    for (mut indices, mut timer, mut sprite) in &mut query {
         timer.tick(time.delta());
         if timer.just_finished() {
-            sprite.index = if sprite.index == indices.last {
-                indices.first
-            } else {
-                sprite.index + 1
-            };
+            sprite.index = indices.tick(&sprite.index);
         }
     }
 }

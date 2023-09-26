@@ -2,6 +2,7 @@ mod paused;
 mod states;
 mod systems;
 mod player;
+mod components;
 
 use bevy::prelude::*;
 
