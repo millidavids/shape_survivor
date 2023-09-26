@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::{states::GameState, components::Game};
+use super::states::GameState;
 
 pub fn toggle_game_state(
     keyboard_input: Res<Input<KeyCode>>,
@@ -22,10 +22,4 @@ pub fn pause_game(mut next_game_state: ResMut<NextState<GameState>>) {
 
 pub fn deactivate_game(mut next_game_state: ResMut<NextState<GameState>>) {
     next_game_state.set(GameState::Inactive);
-}
-
-pub fn spawn_game(
-    mut commands: Commands,
-) {
-    commands.spawn(Game {});
 }
