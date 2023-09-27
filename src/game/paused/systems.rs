@@ -2,14 +2,18 @@ use bevy::prelude::*;
 
 use crate::game::states::GameState;
 
-use super::styles::{MAIN_MENU_STYLE, NORMAL_BUTTON_STYLE, get_button_text, PRESSED_BUTTON_COLOR, HOVERED_BUTTON_COLOR, NORMAL_BUTTON_COLOR};
 use super::components::{PauseMenu, PauseMenuButton};
+use super::styles::{
+    get_button_text, HOVERED_BUTTON_COLOR, NORMAL_BUTTON_COLOR, PAUSE_BUTTON_STYLE,
+    PAUSE_MENU_STYLE, PAUSE_MENU_TRANSFORM, PRESSED_BUTTON_COLOR,
+};
 
 pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn((
             NodeBundle {
-                style: MAIN_MENU_STYLE,
+                style: PAUSE_MENU_STYLE,
+                transform: PAUSE_MENU_TRANSFORM,
                 ..default()
             },
             PauseMenu {},
@@ -19,7 +23,8 @@ pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
             parent
                 .spawn((
                     ButtonBundle {
-                        style: NORMAL_BUTTON_STYLE,
+                        style: PAUSE_BUTTON_STYLE,
+                        transform: PAUSE_MENU_TRANSFORM,
                         ..default()
                     },
                     PauseMenuButton::Running,
@@ -34,7 +39,8 @@ pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
             parent
                 .spawn((
                     ButtonBundle {
-                        style: NORMAL_BUTTON_STYLE,
+                        style: PAUSE_BUTTON_STYLE,
+                        transform: PAUSE_MENU_TRANSFORM,
                         ..default()
                     },
                     PauseMenuButton::MainMenu,
@@ -48,16 +54,19 @@ pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
         });
 }
 
-pub fn despawn_pause_menu(mut commands: Commands, pause_menu_query: Query<Entity, With<PauseMenu>>) {
+pub fn despawn_pause_menu(
+    mut commands: Commands,
+    pause_menu_query: Query<Entity, With<PauseMenu>>,
+) {
     if let Ok(pause_menu_entity) = pause_menu_query.get_single() {
         commands.entity(pause_menu_entity).despawn_recursive();
     }
 }
 
 /// System determining button behavior
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `commands` - List of commands for interacting with the `World`.
 /// * `next_app_state` - Mutable next app state resource.
 /// * `app_exit_event_writer` - Mutable app exit event writer.

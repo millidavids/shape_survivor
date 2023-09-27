@@ -4,7 +4,7 @@ pub const NORMAL_BUTTON_COLOR: Color = Color::hsla(0.0, 0.0, 0.15, 1.0);
 pub const HOVERED_BUTTON_COLOR: Color = Color::hsla(0.0, 0.0, 0.25, 1.0);
 pub const PRESSED_BUTTON_COLOR: Color = Color::hsla(125.0, 0.75, 0.5, 1.0);
 
-pub const MAIN_MENU_STYLE: Style = {
+pub const PAUSE_MENU_STYLE: Style = {
     let mut style = Style::DEFAULT;
     style.width = Val::Percent(100.0);
     style.height = Val::Percent(100.0);
@@ -16,7 +16,13 @@ pub const MAIN_MENU_STYLE: Style = {
     style
 };
 
-pub const NORMAL_BUTTON_STYLE: Style = {
+pub const PAUSE_MENU_TRANSFORM: Transform = {
+    let mut transform = Transform::IDENTITY;
+    transform.translation.z = 1000.0;
+    transform
+};
+
+pub const PAUSE_BUTTON_STYLE: Style = {
     let mut style = Style::DEFAULT;
     style.width = Val::Px(200.0);
     style.height = Val::Px(80.0);
