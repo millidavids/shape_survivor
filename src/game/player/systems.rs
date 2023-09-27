@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
-use super::components::*;
+use super::{components::*, PLAYER_SPEED};
 
 use crate::game::components::{AnimationIndices, AnimationTimer};
 
@@ -24,7 +24,7 @@ pub fn spawn_player(
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
-            transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 0.0),
+            transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 100.0),
             ..default()
         },
         animation_indices,
@@ -56,6 +56,47 @@ pub fn animate_player(
         timer.tick(time.delta());
         if timer.just_finished() {
             sprite.index = indices.tick(&sprite.index);
+        }
+    }
+}
+
+pub fn move_player(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut player_query: Query<&mut Transform, With<Player>>,
+    time: Res<Time>,
+) {
+    let mut direction = Vec3::ZERO;
+
+    if let Ok(mut player_transform) = player_query.get_single_mut() {
+        if keyboard_input.pressed(KeyCode::W) {
+            direction.y += 1.0;
+        }
+        if keyboard_input.pressed(KeyCode::A) {
+            direction.x -= 1.0;
+        }
+        if keyboard_input.pressed(KeyCode::S) {
+            direction.y -= 1.0;
+        }
+        if keyboard_input.pressed(KeyCode::D) {
+            direction.x += 1.0;
+        }
+
+        if direction.length() > 0.0 {
+            direction = direction.normalize();
+        }
+
+        player_transform.translation += direction * PLAYER_SPEED * time.delta_seconds();
+    }
+}
+
+pub fn camera_follow(
+    player_query: Query<&Transform, With<Player>>,
+    mut camera_query: Query<&mut Transform, (With<Camera>, Without<Player>)>,
+) {
+    if let Ok(player_transform) = player_query.get_single() {
+        if let Ok(mut camera_transform) = camera_query.get_single_mut() {
+            camera_transform.translation.x = player_transform.translation.x;
+            camera_transform.translation.y = player_transform.translation.y;
         }
     }
 }
