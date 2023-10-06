@@ -17,14 +17,23 @@ pub fn spawn_player(
     let texture_atlas =
         TextureAtlas::from_grid(texture_handle, Vec2::new(64.0, 64.0), 4, 1, None, None);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
-    let animation_indices = AnimationIndices { first: 0, last: 3, reverse: false };
+    let animation_indices = AnimationIndices {
+        first: 0,
+        last: 3,
+        reverse: false,
+    };
 
     commands.spawn((
         Player {},
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
-            transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 100.0),
+            transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 100.0)
+                .with_scale(Vec3 {
+                    x: 0.5,
+                    y: 0.5,
+                    z: 1.0,
+                }),
             ..default()
         },
         animation_indices,
@@ -32,10 +41,7 @@ pub fn spawn_player(
     ));
 }
 
-pub fn despawn_player(
-    player_query: Query<Entity, With<Player>>,
-    mut commands: Commands,
-) {
+pub fn despawn_player(player_query: Query<Entity, With<Player>>, mut commands: Commands) {
     if let Ok(entity) = player_query.get_single() {
         commands.entity(entity).despawn_recursive();
     }
