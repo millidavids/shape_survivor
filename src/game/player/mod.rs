@@ -9,7 +9,7 @@ use self::systems::{animate_player, camera_follow, despawn_player, move_player, 
 
 use super::states::GameState;
 
-pub const PLAYER_SPEED: f32 = 500.0;
+pub const PLAYER_SPEED: f32 = 250.0;
 
 pub struct PlayerPlugin;
 
