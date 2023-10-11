@@ -4,11 +4,14 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use crate::game::{
     components::{AnimationIndices, AnimationTimer},
-    enemies::components::Enemy,
+    enemies::{
+        components::{Enemy, HordeMover},
+        ENEMY_STD_SPEED, ENEMY_STD_AVOIDANCE, ENEMY_STD_SIZE,
+    },
     player::components::Player,
 };
 
-use super::{components::Triangle, TRIANGLE_SPEED};
+use super::components::Triangle;
 
 pub fn spawn_triangles(
     mut commands: Commands,
@@ -34,12 +37,13 @@ pub fn spawn_triangles(
 
     if let Ok(window) = window_query.get_single() {
         if let Ok(player_transform) = player_query.get_single() {
-            for _ in 0..10 {
+            for _ in 0..20 {
                 let angle = rand::random::<f32>() * PI * 2.0;
                 let (y, x) = angle.sin_cos();
                 commands.spawn((
                     Triangle {},
                     Enemy {},
+                    HordeMover::default(),
                     SpriteSheetBundle {
                         texture_atlas: texture_atlas_handle.clone(),
                         sprite: TextureAtlasSprite::new(animation_indices.clone().first),
@@ -88,20 +92,39 @@ pub fn animate_triangle(
     }
 }
 
-pub fn move_triangle(
-    mut triangle_query: Query<&mut Transform, (With<Triangle>, Without<Player>)>,
+pub fn direction_to_player(
+    mut triangle_query: Query<(&Transform, &mut HordeMover), (With<Triangle>, Without<Player>)>,
     player_query: Query<&Transform, (With<Player>, Without<Triangle>)>,
-    time: Res<Time>,
 ) {
     if let Ok(player_transform) = player_query.get_single() {
-        for mut triangle_transform in triangle_query.iter_mut() {
-            let mut direction = triangle_transform.translation - player_transform.translation;
-
-            if direction.length() > 0.0 {
-                direction = direction.normalize();
-            }
-
-            triangle_transform.translation -= direction * TRIANGLE_SPEED * time.delta_seconds();
+        for (transform, mut hordemover) in &mut triangle_query {
+            hordemover.dxdy += transform.translation - player_transform.translation;
         }
+    }
+}
+
+pub fn avoid_other_triangles(
+    mut triangle_query: Query<(&Transform, &mut HordeMover), (With<Triangle>, Without<Player>)>,
+) {
+    let mut combinations = triangle_query.iter_combinations_mut();
+    while let Some([(transform_a, mut hordemover_a), (transform_b, mut hordemover_b)]) =
+        combinations.fetch_next()
+    {
+        let weight = (ENEMY_STD_SIZE * 1.5) - transform_a.translation.distance(transform_b.translation);
+        if weight > 0.0 {
+            hordemover_a.dxdy -= (transform_a.translation - transform_b.translation) * weight * ENEMY_STD_AVOIDANCE;
+            hordemover_b.dxdy -= (transform_b.translation - transform_a.translation) * weight * ENEMY_STD_AVOIDANCE;
+        }
+    }
+}
+
+pub fn move_triangle(
+    mut triangle_query: Query<(&mut Transform, &mut HordeMover), (With<Triangle>, Without<Player>)>,
+    time: Res<Time>,
+) {
+    for (mut transform, mut hordemover) in &mut triangle_query {
+        transform.translation -=
+            hordemover.dxdy.normalize_or_zero() * time.delta_seconds() * ENEMY_STD_SPEED;
+        hordemover.noise();
     }
 }
