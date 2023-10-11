@@ -8,11 +8,11 @@ use crate::states::AppState;
 
 use self::systems::{despawn_grid, spawn_grid};
 
-pub const GRID_SMALL_BOX_LENGTH: u32 = 40;
+pub const GRID_SMALL_BOX_LENGTH: u32 = 32;
 pub const GRID_LARGE_BOX_LENGTH: u32 = GRID_SMALL_BOX_LENGTH * 5;
 
-pub const NUM_SMALL_BOX_WIDTH: u32 = 85;
-pub const NUM_SMALL_BOX_HEIGHT: u32 = 110;
+pub const NUM_SMALL_BOX_WIDTH: u32 = 850;
+pub const NUM_SMALL_BOX_HEIGHT: u32 = 1100;
 pub const NUM_LARGE_BOX_WIDTH: u32 = NUM_SMALL_BOX_WIDTH / 5;
 pub const NUM_LARGE_BOX_HEIGHT: u32 = NUM_SMALL_BOX_HEIGHT / 5;
 
