@@ -34,7 +34,7 @@ pub fn toggle_game_state(
     current_game_state: Res<State<GameState>>,
     mut next_game_state: ResMut<NextState<GameState>>,
 ) {
-    if keyboard_input.just_pressed(KeyCode::Space) {
+    if keyboard_input.just_pressed(KeyCode::P) {
         match *current_game_state.get() {
             GameState::Running => next_game_state.set(GameState::Paused),
             GameState::Paused => next_game_state.set(GameState::Running),

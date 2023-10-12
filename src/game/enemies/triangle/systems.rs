@@ -84,7 +84,7 @@ pub fn spawn_triangles(
 
     if let Ok(window) = window_query.get_single() {
         if let Ok(player_transform) = player_query.get_single() {
-            for _ in 0..20 {
+            for _ in 0..10 {
                 let angle = rand::random::<f32>() * PI * 2.0;
                 let (y, x) = angle.sin_cos();
                 commands.spawn((

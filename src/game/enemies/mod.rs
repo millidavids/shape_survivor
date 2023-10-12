@@ -1,5 +1,5 @@
 mod triangle;
-mod components;
+pub mod components;
 
 use bevy::prelude::*;
 

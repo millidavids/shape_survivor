@@ -1,11 +1,12 @@
 pub mod components;
 mod systems;
+mod abilities;
 
 use bevy::prelude::*;
 
 use crate::states::AppState;
 
-use self::systems::{animate_player, camera_follow, despawn_player, move_player, spawn_player};
+use self::{systems::{animate_player, camera_follow, despawn_player, move_player, spawn_player}, abilities::AbilitiesPlugin};
 
 use super::states::GameState;
 
@@ -39,7 +40,8 @@ impl Plugin for PlayerPlugin {
     ///
     /// * `app`: The Bevy app builder used to register the systems.
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(AppState::Game), spawn_player)
+        app.add_plugins(AbilitiesPlugin)
+            .add_systems(OnEnter(AppState::Game), spawn_player)
             .add_systems(
                 Update,
                 (animate_player, move_player, camera_follow).run_if(in_state(GameState::Running)),
