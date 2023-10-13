@@ -1,13 +1,17 @@
-use bevy::{prelude::*, sprite::{collide_aabb::collide, MaterialMesh2dBundle}};
+use bevy::{
+    prelude::*,
+    sprite::{collide_aabb::collide, MaterialMesh2dBundle},
+};
 use rand::seq::IteratorRandom;
 
 use crate::game::{
-    components::{AnimationIndices, AnimationTimer, Health},
+    components::Health,
     enemies::components::Enemy,
+    grid::{GRID_HEIGHT, GRID_WIDTH},
     player::{
         abilities::{components::Projectile, DEFAULT_ABILITY_SPEED},
         components::Player,
-    }, grid::{GRID_WIDTH, GRID_HEIGHT},
+    },
 };
 
 use super::{components::Dot, DEFAULT_DOT_RADIUS};
@@ -67,7 +71,9 @@ pub fn spawn_dot(
                     direction: player_transform.translation - random_enemy_transform.translation,
                 },
                 MaterialMesh2dBundle {
-                    mesh: meshes.add(shape::Circle::new(DEFAULT_DOT_RADIUS).into()).into(),
+                    mesh: meshes
+                        .add(shape::Circle::new(DEFAULT_DOT_RADIUS).into())
+                        .into(),
                     material: materials.add(ColorMaterial::from(Color::BLACK)),
                     transform: Transform::from_xyz(
                         player_transform.translation.x,
@@ -86,10 +92,7 @@ pub fn spawn_dot(
     }
 }
 
-pub fn despawn_dots(
-    mut commands: Commands,
-    dots_query: Query<Entity, With<Dot>>,
-) {
+pub fn despawn_dots(mut commands: Commands, dots_query: Query<Entity, With<Dot>>) {
     for entity in &dots_query {
         commands.entity(entity).despawn_recursive();
     }
@@ -159,10 +162,7 @@ pub fn enemy_impact(
     }
 }
 
-pub fn check_bounds(
-    mut commands: Commands,
-    dots_query: Query<(Entity, &Transform), With<Dot>>,
-) {
+pub fn check_bounds(mut commands: Commands, dots_query: Query<(Entity, &Transform), With<Dot>>) {
     for (entity, transform) in &dots_query {
         let x = transform.translation.x;
         let y = transform.translation.y;
