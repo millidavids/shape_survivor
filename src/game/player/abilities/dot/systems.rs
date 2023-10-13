@@ -1,16 +1,16 @@
-use bevy::{prelude::*, sprite::collide_aabb::collide};
+use bevy::{prelude::*, sprite::{collide_aabb::collide, MaterialMesh2dBundle}};
 use rand::seq::IteratorRandom;
 
 use crate::game::{
-    components::{AnimationIndices, AnimationTimer},
+    components::{AnimationIndices, AnimationTimer, Health},
     enemies::components::Enemy,
     player::{
         abilities::{components::Projectile, DEFAULT_ABILITY_SPEED},
         components::Player,
-    },
+    }, grid::{GRID_WIDTH, GRID_HEIGHT},
 };
 
-use super::components::Dot;
+use super::{components::Dot, DEFAULT_DOT_RADIUS};
 
 /// A Bevy system responsible for spawning dot projectiles in the game.
 ///
@@ -53,27 +53,12 @@ use super::components::Dot;
 /// - [`Query`](https://bevyengine.github.io/bevy/bevy/ecs/struct.Query.html): Bevy mechanism for accessing entity components.
 pub fn spawn_dot(
     mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
     player_query: Query<&Transform, With<Player>>,
     enemy_query: Query<&Transform, With<Enemy>>,
-    dots_query: Query<Entity, With<Dot>>,
 ) {
-    for entity in &dots_query {
-        commands.entity(entity).despawn_recursive();
-    }
-
     if let Ok(player_transform) = player_query.get_single() {
-        let texture_handle = asset_server.load("sprites/dot_ability_4_frame_4x4.png");
-        let texture_atlas =
-            TextureAtlas::from_grid(texture_handle, Vec2::new(4.0, 4.0), 4, 1, None, None);
-        let texture_atlas_handle = texture_atlases.add(texture_atlas);
-        let animation_indices = AnimationIndices {
-            first: 0,
-            last: 3,
-            reverse: false,
-        };
-
         if let Some(random_enemy_transform) = enemy_query.iter().choose(&mut rand::thread_rng()) {
             commands.spawn((
                 Dot {},
@@ -81,9 +66,9 @@ pub fn spawn_dot(
                     speed: DEFAULT_ABILITY_SPEED,
                     direction: player_transform.translation - random_enemy_transform.translation,
                 },
-                SpriteSheetBundle {
-                    texture_atlas: texture_atlas_handle,
-                    sprite: TextureAtlasSprite::new(animation_indices.first),
+                MaterialMesh2dBundle {
+                    mesh: meshes.add(shape::Circle::new(DEFAULT_DOT_RADIUS).into()).into(),
+                    material: materials.add(ColorMaterial::from(Color::BLACK)),
                     transform: Transform::from_xyz(
                         player_transform.translation.x,
                         player_transform.translation.y,
@@ -96,10 +81,17 @@ pub fn spawn_dot(
                     }),
                     ..default()
                 },
-                animation_indices,
-                AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
             ));
         }
+    }
+}
+
+pub fn despawn_dots(
+    mut commands: Commands,
+    dots_query: Query<Entity, With<Dot>>,
+) {
+    for entity in &dots_query {
+        commands.entity(entity).despawn_recursive();
     }
 }
 
@@ -147,22 +139,35 @@ pub fn move_dots(mut dots_query: Query<(&mut Transform, &Projectile), With<Dot>>
 /// TODO: needs to change to do damage rather than just despawn the entities
 pub fn enemy_impact(
     mut commands: Commands,
-    enemies_query: Query<(Entity, &Transform, &Handle<TextureAtlas>), With<Enemy>>,
-    dots_query: Query<(Entity, &Transform, &Handle<TextureAtlas>), With<Dot>>,
+    mut enemies_query: Query<(&mut Health, &Transform, &Handle<TextureAtlas>), With<Enemy>>,
+    dots_query: Query<(Entity, &Transform), With<Dot>>,
     texture_atlases: Res<Assets<TextureAtlas>>,
 ) {
-    if let Ok((dot_entity, dot_transform, dot_texture_atlas)) = dots_query.get_single() {
-        for (enemy_entity, enemy_transform, enemy_texture_atlas) in &enemies_query {
+    for (dot_entity, dot_transform) in &dots_query {
+        for (mut enemy_health, enemy_transform, enemy_texture_atlas) in &mut enemies_query {
             if collide(
                 dot_transform.translation,
-                Vec2::splat(texture_atlases.get(dot_texture_atlas).unwrap().size.y),
+                Vec2::splat(DEFAULT_DOT_RADIUS * 2.0),
                 enemy_transform.translation,
                 Vec2::splat(texture_atlases.get(enemy_texture_atlas).unwrap().size.y / 2.0),
             ) != None
             {
                 commands.entity(dot_entity).despawn_recursive();
-                commands.entity(enemy_entity).despawn_recursive();
+                enemy_health.0 -= 100.0;
             }
+        }
+    }
+}
+
+pub fn check_bounds(
+    mut commands: Commands,
+    dots_query: Query<(Entity, &Transform), With<Dot>>,
+) {
+    for (entity, transform) in &dots_query {
+        let x = transform.translation.x;
+        let y = transform.translation.y;
+        if x <= 0.0 || x >= GRID_WIDTH as f32 || y <= 0.0 || y >= GRID_HEIGHT as f32 {
+            commands.entity(entity).despawn_recursive();
         }
     }
 }

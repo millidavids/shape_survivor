@@ -3,7 +3,7 @@ use std::f32::consts::PI;
 use bevy::{prelude::*, window::PrimaryWindow};
 
 use crate::game::{
-    components::{AnimationIndices, AnimationTimer},
+    components::{AnimationIndices, AnimationTimer, Health},
     enemies::{
         components::{Enemy, HordeMover},
         ENEMY_STD_SPEED, ENEMY_STD_AVOIDANCE, ENEMY_STD_SIZE,
@@ -90,6 +90,7 @@ pub fn spawn_triangles(
                 commands.spawn((
                     Triangle {},
                     Enemy {},
+                    Health(100.0),
                     HordeMover::default(),
                     SpriteSheetBundle {
                         texture_atlas: texture_atlas_handle.clone(),
