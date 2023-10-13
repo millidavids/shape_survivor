@@ -33,7 +33,7 @@ pub const PAUSE_BUTTON_STYLE: Style = {
 
 /// Retrieves a `Text` component with the specified string and a default font size for buttons.
 ///
-/// This function serves as a helper to quickly retrieve a `Text` component with a specified string 
+/// This function serves as a helper to quickly retrieve a `Text` component with a specified string
 /// for use within UI buttons. It utilizes a default font size specifically tailored for buttons.
 ///
 /// # Parameters:
@@ -54,7 +54,7 @@ pub fn get_button_text(asset_server: &Res<AssetServer>, text: &str) -> Text {
 
 /// Retrieves a `Text` component with the specified string and font size.
 ///
-/// This utility function is designed to provide a flexible means of obtaining a `Text` component 
+/// This utility function is designed to provide a flexible means of obtaining a `Text` component
 /// with custom styles, while ensuring consistent design elements like font and color.
 ///
 /// # Parameters:

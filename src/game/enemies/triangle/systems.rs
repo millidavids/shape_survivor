@@ -6,7 +6,7 @@ use crate::game::{
     components::{AnimationIndices, AnimationTimer, Health},
     enemies::{
         components::{Enemy, HordeMover},
-        ENEMY_STD_SPEED, ENEMY_STD_AVOIDANCE, ENEMY_STD_SIZE,
+        ENEMY_STD_AVOIDANCE, ENEMY_STD_SIZE, ENEMY_STD_SPEED,
     },
     player::components::Player,
 };
@@ -320,10 +320,13 @@ pub fn avoid_other_triangles(
     while let Some([(transform_a, mut hordemover_a), (transform_b, mut hordemover_b)]) =
         combinations.fetch_next()
     {
-        let weight = (ENEMY_STD_SIZE * 1.5) - transform_a.translation.distance(transform_b.translation);
+        let weight =
+            (ENEMY_STD_SIZE * 1.5) - transform_a.translation.distance(transform_b.translation);
         if weight > 0.0 {
-            hordemover_a.dxdy -= (transform_a.translation - transform_b.translation) * weight * ENEMY_STD_AVOIDANCE;
-            hordemover_b.dxdy -= (transform_b.translation - transform_a.translation) * weight * ENEMY_STD_AVOIDANCE;
+            hordemover_a.dxdy -=
+                (transform_a.translation - transform_b.translation) * weight * ENEMY_STD_AVOIDANCE;
+            hordemover_b.dxdy -=
+                (transform_b.translation - transform_a.translation) * weight * ENEMY_STD_AVOIDANCE;
         }
     }
 }

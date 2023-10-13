@@ -16,7 +16,7 @@ use super::DEFAULT_ABILITY_SPEED;
 /// The `Default` trait is implemented for `Projectile`, providing a default instance with zero speed and a zero-direction vector.
 ///
 /// # See Also
-/// 
+///
 /// - [`spawn_projectile`](fn.spawn_projectile.html): A Bevy system that demonstrates how to spawn projectiles.
 /// - [`Vec3`
 #[derive(Component)]
@@ -27,6 +27,9 @@ pub struct Projectile {
 
 impl Default for Projectile {
     fn default() -> Self {
-        Projectile { speed: DEFAULT_ABILITY_SPEED, direction: Vec3::ZERO }
+        Projectile {
+            speed: DEFAULT_ABILITY_SPEED,
+            direction: Vec3::ZERO,
+        }
     }
 }

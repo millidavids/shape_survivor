@@ -4,14 +4,14 @@ use super::states::GameState;
 
 /// Toggles the game's state between `Running`, `Paused`, and `Inactive` when the Space key is pressed.
 ///
-/// This system checks if the Space key has just been pressed. Depending on the current game state, it transitions 
+/// This system checks if the Space key has just been pressed. Depending on the current game state, it transitions
 /// to a new state:
 ///
 /// - From `Running` to `Paused`.
 /// - From `Paused` to `Running`.
 /// - From `Inactive` to `Paused`.
 ///
-/// The system provides a way to quickly pause or resume the game and is especially useful for providing 
+/// The system provides a way to quickly pause or resume the game and is especially useful for providing
 /// players with a way to temporarily halt gameplay.
 ///
 /// # Parameters
@@ -45,7 +45,7 @@ pub fn toggle_game_state(
 
 /// Sets the game's state to `Paused`.
 ///
-/// This system immediately transitions the game to the `Paused` state, effectively 
+/// This system immediately transitions the game to the `Paused` state, effectively
 /// pausing all in-game activities that respect this state.
 ///
 /// # Parameters
@@ -68,8 +68,8 @@ pub fn pause_game(mut next_game_state: ResMut<NextState<GameState>>) {
 /// Sets the game's state to `Inactive`.
 ///
 /// This system transitions the game to the `Inactive` state, halting any in-game activities
-/// that check or respond to this specific state. Useful for situations where gameplay 
-/// should not only be paused, but also be transitioned to a non-active state, such as 
+/// that check or respond to this specific state. Useful for situations where gameplay
+/// should not only be paused, but also be transitioned to a non-active state, such as
 /// when transitioning to a main menu or loading screen.
 ///
 /// # Parameters

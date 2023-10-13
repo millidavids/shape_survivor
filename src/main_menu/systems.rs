@@ -87,18 +87,18 @@ pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 /// Despawns the main menu and its associated UI components from the game world.
 ///
-/// This system identifies the main menu entity by the `MainMenu` component and recursively despawns it, 
+/// This system identifies the main menu entity by the `MainMenu` component and recursively despawns it,
 /// ensuring that both the main menu and all its child entities (like buttons or other UI elements) are removed.
 ///
 /// # Parameters
 ///
-/// - `commands`: A mutable reference to the Bevy command buffer. This provides the ability to queue changes to the world, 
+/// - `commands`: A mutable reference to the Bevy command buffer. This provides the ability to queue changes to the world,
 ///   including despawning entities.
 /// - `main_menu_query`: A query designed to fetch entities tagged with the `MainMenu` component.
 ///
 /// # Usage
 ///
-/// Typically, you would use this system when transitioning away from the main menu, such as when a player decides to start the game 
+/// Typically, you would use this system when transitioning away from the main menu, such as when a player decides to start the game
 /// or when the main menu should be hidden for any other reason.
 ///
 /// ```rust
@@ -118,7 +118,7 @@ pub fn despawn_main_menu(mut commands: Commands, main_menu_query: Query<Entity, 
 
 /// Handles interactions with main menu buttons and applies visual feedback.
 ///
-/// This system responds to button interactions by changing the background color of the button based on the current interaction state 
+/// This system responds to button interactions by changing the background color of the button based on the current interaction state
 /// (e.g., pressed, hovered). Additionally, for specific button interactions, it updates the application's state or triggers app exit events.
 ///
 /// - When the "Play" button is pressed, the game's next state is set to `AppState::Game`.
@@ -142,7 +142,7 @@ pub fn despawn_main_menu(mut commands: Commands, main_menu_query: Query<Entity, 
 ///     .run();
 /// ```
 ///
-/// Note: Make sure that the constants `PRESSED_BUTTON_COLOR`, `HOVERED_BUTTON_COLOR`, and `NORMAL_BUTTON_COLOR` 
+/// Note: Make sure that the constants `PRESSED_BUTTON_COLOR`, `HOVERED_BUTTON_COLOR`, and `NORMAL_BUTTON_COLOR`
 /// are defined and accessible. Similarly, ensure that `MainMenuButton` and `AppState` enumerations are available.
 ///
 pub fn button_interaction(

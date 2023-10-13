@@ -1,12 +1,15 @@
+mod abilities;
 pub mod components;
 mod systems;
-mod abilities;
 
 use bevy::prelude::*;
 
 use crate::states::AppState;
 
-use self::{systems::{animate_player, camera_follow, despawn_player, move_player, spawn_player}, abilities::AbilitiesPlugin};
+use self::{
+    abilities::AbilitiesPlugin,
+    systems::{animate_player, camera_follow, despawn_player, move_player, spawn_player},
+};
 
 use super::states::GameState;
 

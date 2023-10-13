@@ -2,13 +2,13 @@ use bevy::prelude::*;
 
 /// Represents the various states of the game.
 ///
-/// `GameState` provides different states that the game can be in at any given moment. This 
+/// `GameState` provides different states that the game can be in at any given moment. This
 /// allows for easier management and transitions between different gameplay stages or modes.
 ///
 /// Variants:
-/// - `Inactive`: Represents a state where the game is not actively running. This could be 
+/// - `Inactive`: Represents a state where the game is not actively running. This could be
 ///   used for scenarios like the game's main menu or loading screens.
-/// - `Paused`: Represents a state where the game's progress or activities are temporarily halted, 
+/// - `Paused`: Represents a state where the game's progress or activities are temporarily halted,
 ///   but can be resumed from the point of pausing.
 /// - `Running`: Represents the normal, active state where gameplay activities are ongoing.
 ///

@@ -6,7 +6,8 @@ use bevy::prelude::*;
 use crate::{game::states::GameState, states::AppState};
 
 use self::systems::{
-    animate_triangle, despawn_triangles, direction_to_player, move_triangle, spawn_triangles, avoid_other_triangles,
+    animate_triangle, avoid_other_triangles, despawn_triangles, direction_to_player, move_triangle,
+    spawn_triangles,
 };
 
 /// Bevy plugin for triangle enemy entities and their behaviors.

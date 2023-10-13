@@ -1,9 +1,8 @@
 use bevy::prelude::*;
 
-
 use super::{
-    components::Grid, GRID_LARGE_BOX_LENGTH, GRID_SMALL_BOX_LENGTH,
-    NUM_LARGE_BOX_HEIGHT, NUM_LARGE_BOX_WIDTH, NUM_SMALL_BOX_HEIGHT, NUM_SMALL_BOX_WIDTH, GRID_WIDTH, GRID_HEIGHT,
+    components::Grid, GRID_HEIGHT, GRID_LARGE_BOX_LENGTH, GRID_SMALL_BOX_LENGTH, GRID_WIDTH,
+    NUM_LARGE_BOX_HEIGHT, NUM_LARGE_BOX_WIDTH, NUM_SMALL_BOX_HEIGHT, NUM_SMALL_BOX_WIDTH,
 };
 
 /// Spawns a visual grid in the game world.
@@ -55,10 +54,7 @@ pub fn spawn_grid(mut commands: Commands) {
                 )),
                 sprite: Sprite {
                     color: Color::hsla(1.0, 1.0, 1.0, 1.0),
-                    custom_size: Some(Vec2::new(
-                        GRID_WIDTH as f32,
-                        GRID_HEIGHT as f32,
-                    )),
+                    custom_size: Some(Vec2::new(GRID_WIDTH as f32, GRID_HEIGHT as f32)),
                     ..default()
                 },
                 visibility: Visibility::Visible,
@@ -70,7 +66,8 @@ pub fn spawn_grid(mut commands: Commands) {
             for i in 0..=NUM_SMALL_BOX_WIDTH {
                 parent.spawn(SpriteBundle {
                     transform: Transform::from_translation(Vec3::new(
-                        (i as f32 - NUM_SMALL_BOX_WIDTH as f32 / 2.0) * GRID_SMALL_BOX_LENGTH as f32,
+                        (i as f32 - NUM_SMALL_BOX_WIDTH as f32 / 2.0)
+                            * GRID_SMALL_BOX_LENGTH as f32,
                         0.,
                         1.0,
                     )),
@@ -89,7 +86,8 @@ pub fn spawn_grid(mut commands: Commands) {
                 parent.spawn(SpriteBundle {
                     transform: Transform::from_translation(Vec3::new(
                         0.,
-                        (i as f32 - NUM_SMALL_BOX_HEIGHT as f32 / 2.0) * GRID_SMALL_BOX_LENGTH as f32,
+                        (i as f32 - NUM_SMALL_BOX_HEIGHT as f32 / 2.0)
+                            * GRID_SMALL_BOX_LENGTH as f32,
                         1.0,
                     )),
                     sprite: Sprite {
@@ -106,7 +104,8 @@ pub fn spawn_grid(mut commands: Commands) {
             for i in 0..=NUM_LARGE_BOX_WIDTH {
                 parent.spawn(SpriteBundle {
                     transform: Transform::from_translation(Vec3::new(
-                        (i as f32 - NUM_LARGE_BOX_WIDTH as f32 / 2.0) * GRID_LARGE_BOX_LENGTH as f32,
+                        (i as f32 - NUM_LARGE_BOX_WIDTH as f32 / 2.0)
+                            * GRID_LARGE_BOX_LENGTH as f32,
                         0.,
                         1.0,
                     )),
@@ -125,7 +124,8 @@ pub fn spawn_grid(mut commands: Commands) {
                 parent.spawn(SpriteBundle {
                     transform: Transform::from_translation(Vec3::new(
                         0.,
-                        (i as f32 - NUM_LARGE_BOX_HEIGHT as f32 / 2.0) * GRID_LARGE_BOX_LENGTH as f32,
+                        (i as f32 - NUM_LARGE_BOX_HEIGHT as f32 / 2.0)
+                            * GRID_LARGE_BOX_LENGTH as f32,
                         1.0,
                     )),
                     sprite: Sprite {
@@ -144,7 +144,7 @@ pub fn spawn_grid(mut commands: Commands) {
 
 /// Despawns the visual grid and its associated entities from the game world.
 ///
-/// The system identifies the primary grid by querying entities with the `Grid` component. 
+/// The system identifies the primary grid by querying entities with the `Grid` component.
 /// Once the grid entity is found, it and all of its child entities are despawned recursively.
 ///
 /// # Parameters:
@@ -152,7 +152,7 @@ pub fn spawn_grid(mut commands: Commands) {
 /// - `commands`: A mutable reference to the `Commands` struct, which facilitates the despawning of entities and components.
 ///
 /// # Usage:
-/// This system can be used to clear the visual grid, especially in cases where the grid needs to 
+/// This system can be used to clear the visual grid, especially in cases where the grid needs to
 /// be refreshed, updated, or when transitioning between different game states or levels.
 ///
 /// # Examples:
@@ -168,10 +168,7 @@ pub fn spawn_grid(mut commands: Commands) {
 ///
 /// # Note:
 /// Ensure that the `Grid` component is defined in the same module or is globally accessible for this system to function correctly.
-pub fn despawn_grid(
-    grid_query: Query<Entity, With<Grid>>,
-    mut commands: Commands,
-) {
+pub fn despawn_grid(grid_query: Query<Entity, With<Grid>>, mut commands: Commands) {
     if let Ok(entity) = grid_query.get_single() {
         commands.entity(entity).despawn_recursive();
     }

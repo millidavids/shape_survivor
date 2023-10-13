@@ -27,7 +27,7 @@ pub const NORMAL_BUTTON_STYLE: Style = {
 
 /// Retrieves a `Text` component for a button with the specified content and a default font size.
 ///
-/// This function utilizes the provided `AssetServer` to generate a `Text` component with the given content. 
+/// This function utilizes the provided `AssetServer` to generate a `Text` component with the given content.
 /// It uses a default font size of 48.0 for the text.
 ///
 /// # Parameters
@@ -59,7 +59,7 @@ pub fn get_button_text(asset_server: &Res<AssetServer>, text: &str) -> Text {
 /// Retrieves a `Text` component styled with the specified content, font, and font size.
 ///
 /// This utility function utilizes the provided `AssetServer` to generate a `Text` component styled with a specific font and font size.
-/// The default font used is "Davidfont.otf" from the assets directory. The text's color is set to a very light shade (90% lightness), 
+/// The default font used is "Davidfont.otf" from the assets directory. The text's color is set to a very light shade (90% lightness),
 /// and its alignment is centered.
 ///
 /// # Parameters

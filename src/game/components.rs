@@ -57,8 +57,8 @@ impl AnimationIndices {
 /// # Usage
 /// ```rust
 /// let mut animation_timer = AnimationTimer(Timer::from_seconds(0.1, true));
-/// if animation_timer.0.finished(&time) { 
-///     // Handle animation frame update 
+/// if animation_timer.0.finished(&time) {
+///     // Handle animation frame update
 /// }
 /// ```
 #[derive(Component, Deref, DerefMut)]
