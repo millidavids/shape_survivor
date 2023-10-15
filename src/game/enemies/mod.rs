@@ -1,10 +1,15 @@
 pub mod components;
+mod events;
 mod systems;
 mod triangle;
 
 use bevy::prelude::*;
 
-use self::{systems::check_health, triangle::TrianglePlugin};
+use self::{
+    events::EnemyDeathEvent,
+    systems::{check_health, enemy_killed},
+    triangle::TrianglePlugin,
+};
 
 use super::states::GameState;
 
@@ -45,7 +50,11 @@ impl Plugin for EnemiesPlugin {
     /// - `app`: A mutable reference to the Bevy app to which the plugin should add its systems and resources.
     fn build(&self, app: &mut App) {
         // Add systems and resources related to enemy entities and behaviors here
-        app.add_plugins(TrianglePlugin)
-            .add_systems(Update, check_health.run_if(in_state(GameState::Running)));
+        app.add_event::<EnemyDeathEvent>()
+            .add_plugins(TrianglePlugin)
+            .add_systems(
+                Update,
+                ((check_health, enemy_killed).chain()).run_if(in_state(GameState::Running)),
+            );
     }
 }

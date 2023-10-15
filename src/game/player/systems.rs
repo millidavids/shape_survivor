@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
-use super::{components::*, PLAYER_SPEED};
+use super::{components::*, PLAYER_SPEED, events::{AddPlayerXpEvent, PlayerLevelUpEvent}};
 
 use crate::game::components::{AnimationIndices, AnimationTimer};
 
@@ -54,7 +54,7 @@ pub fn spawn_player(
     };
 
     commands.spawn((
-        Player {},
+        Player::default(),
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
@@ -251,6 +251,32 @@ pub fn camera_follow(
         if let Ok(mut camera_transform) = camera_query.get_single_mut() {
             camera_transform.translation.x = player_transform.translation.x;
             camera_transform.translation.y = player_transform.translation.y;
+        }
+    }
+}
+
+pub fn add_xp(
+    mut add_player_xp_event_reader: EventReader<AddPlayerXpEvent>,
+    mut player_level_up_event_writer: EventWriter<PlayerLevelUpEvent>,
+    mut player_query: Query<&mut Player>,
+) {
+    if let Ok(mut player) = player_query.get_single_mut() {
+        let xp: f32 = add_player_xp_event_reader.iter().map(|e| e.0).sum();
+        player.xp.0 += xp;
+        if player.xp.0 >= player.xp.1 {
+            player_level_up_event_writer.send(PlayerLevelUpEvent);
+        }
+    }
+}
+
+pub fn check_level(
+    mut player_level_up_event_reader: EventReader<PlayerLevelUpEvent>,
+    mut player_query: Query<&mut Player>,
+) {
+    if let Ok(mut player) = player_query.get_single_mut() {
+        for _ in player_level_up_event_reader.iter() {
+            player.level_up();
+            println!("Level Up: {:?}", player);
         }
     }
 }
