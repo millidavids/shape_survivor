@@ -8,28 +8,6 @@ use crate::states::AppState;
 
 use self::systems::{button_interaction, despawn_main_menu, spawn_main_menu};
 
-/// `MainMenuPlugin` handles the main menu's functionality and lifecycle within the game.
-///
-/// This plugin is responsible for setting up and managing the main menu's systems, ensuring
-/// they run at appropriate stages of the game loop. Specifically:
-///
-/// - `spawn_main_menu` is called when entering the `MainMenu` state, ensuring the main menu UI
-///   and elements are appropriately spawned.
-/// - `button_interaction` runs continuously during the `Update` stage, handling user interactions
-///   with the main menu buttons.
-/// - `despawn_main_menu` is called when exiting the `MainMenu` state, ensuring that the main menu
-///   UI and elements are cleaned up from the game world.
-///
-/// # Usage
-///
-/// To use the `MainMenuPlugin`, you simply add it to your Bevy app during initialization:
-///
-/// ```rust
-/// App::build()
-///     .add_plugins(DefaultPlugins)
-///     .add_plugins(MainMenuPlugin)
-///     .run();
-/// ```
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {

@@ -18,32 +18,6 @@ pub const NUM_LARGE_BOX_HEIGHT: u32 = NUM_SMALL_BOX_HEIGHT / 5;
 pub const GRID_WIDTH: u32 = GRID_SMALL_BOX_LENGTH * NUM_SMALL_BOX_WIDTH;
 pub const GRID_HEIGHT: u32 = GRID_SMALL_BOX_LENGTH * NUM_SMALL_BOX_HEIGHT;
 
-/// A Bevy plugin responsible for managing the visual grid in the game world.
-///
-/// The `GridPlugin` facilitates the spawning and despawning of the visual grid based on the game's state.
-/// Specifically, when entering the `AppState::Game` state, the grid is spawned, and upon exiting this state, the grid is despawned.
-///
-/// # Usage:
-/// To use the `GridPlugin`, simply add it to your Bevy app during the app building process.
-///
-/// # Examples:
-/// ```rust
-/// # use bevy::prelude::*;
-///
-/// # fn main() {
-/// let mut app = App::build();
-///
-/// // Add the GridPlugin to your app.
-/// app.add_plugins(GridPlugin);
-/// # }
-/// ```
-///
-/// # Systems:
-/// - `spawn_grid`: Spawned during `OnEnter(AppState::Game)`. This system spawns the visual grid and its associated entities in the game world.
-/// - `despawn_grid`: Spawned during `OnExit(AppState::Game)`. This system despawns the grid and its children entities from the game world.
-///
-/// # Note:
-/// Ensure that the relevant systems (`spawn_grid` and `despawn_grid`) as well as the `Grid` component (if utilized by the systems) are defined in the same module or are globally accessible for this plugin to function correctly.
 pub struct GridPlugin;
 
 impl Plugin for GridPlugin {

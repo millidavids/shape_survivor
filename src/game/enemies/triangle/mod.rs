@@ -10,15 +10,6 @@ use self::systems::{
     spawn_triangles,
 };
 
-/// Bevy plugin for triangle enemy entities and their behaviors.
-///
-/// The `TrianglePlugin` is responsible for managing and updating triangle enemy entities in the game.
-///
-/// # Overview
-///
-/// This plugin adds and updates triangle enemy entities and their behaviors during the game.
-/// It includes systems for animation, spawning, movement, and interaction with other game entities.
-///
 pub struct TrianglePlugin;
 
 impl Plugin for TrianglePlugin {

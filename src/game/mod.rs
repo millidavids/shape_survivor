@@ -19,27 +19,6 @@ use self::{
     systems::{deactivate_game, pause_game, toggle_game_state},
 };
 
-/// `GamePlugin` manages the core game functionality and its lifecycle.
-///
-/// This plugin is responsible for setting up and managing the game's core systems and states,
-/// ensuring they run at appropriate stages of the game loop. Specifically, it:
-///
-/// - Sets up the main game state via `GameState`.
-/// - Adds various game-related plugins such as `PausedPlugin`, `PlayerPlugin`, `GridPlugin`, and `EnemiesPlugin`.
-/// - Manages game state transitions and associated system executions. For instance, it ensures
-///   the game is paused upon entering the `Game` state, toggles the game state based on certain
-///   conditions, and handles the transition back to the main menu from the `Inactive` state.
-///
-/// # Usage
-///
-/// To use the `GamePlugin`, you simply add it to your Bevy app during initialization:
-///
-/// ```rust
-/// App::build()
-///     .add_plugins(DefaultPlugins)
-///     .add_plugins(GamePlugin)
-///     .run();
-/// ```
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {

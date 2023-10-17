@@ -8,11 +8,6 @@ use crate::{game::states::GameState, states::AppState};
 
 use self::systems::{button_interaction, despawn_pause_menu, spawn_pause_menu};
 
-/// A Bevy `Plugin` for managing the paused state of the game.
-///
-/// The `PausedPlugin` provides the necessary systems to handle the behavior of the game when it's in
-/// the paused state. Specifically, it handles the spawning and interaction with the pause menu, as well
-/// as the despawning of the pause menu when the game exits the paused state.
 pub struct PausedPlugin;
 
 impl Plugin for PausedPlugin {

@@ -11,26 +11,6 @@ use self::systems::{check_bounds, despawn_dots, enemy_impact, move_dots, spawn_d
 
 pub const DEFAULT_DOT_RADIUS: f32 = 2.0;
 
-/// Bevy plugin for dot projectiles and abilities.
-///
-/// This plugin adds systems and components related to dot projectiles and abilities in the game.
-/// It includes systems for moving dots, handling enemy impacts, and spawning new dots.
-///
-/// # Systems
-///
-/// The `DotPlugin` includes the following systems:
-///
-/// - `move_dots`: Moves dot projectiles based on their speed and direction.
-/// - `enemy_impact`: Handles the impact of dot projectiles on enemies.
-/// - `spawn_dot`: Spawns new dot projectiles periodically.
-///
-/// # See Also
-///
-/// - [Bevy](https://bevyengine.org/): Bevy game engine's official website.
-/// - [`Plugin`](https://docs.rs/bevy/latest/bevy/app/trait.Plugin.html): Bevy trait for defining plugins.
-/// - [`move_dots`](fn.move_dots.html): A Bevy system for moving dot projectiles.
-/// - [`enemy_impact`](fn.enemy_impact.html): A Bevy system for handling the impact of dot projectiles on enemies.
-/// - [`spawn_dot`](fn.spawn_dot.html): A Bevy system for spawning new dot projectiles.
 pub struct DotPlugin;
 
 impl Plugin for DotPlugin {

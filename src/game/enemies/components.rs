@@ -1,31 +1,6 @@
 use bevy::prelude::*;
 use rand::Rng;
 
-/// Component representing an enemy entity in the game.
-///
-/// The `Enemy` component is used to tag entities in the game world as enemies. It allows systems and queries to identify and
-/// interact with enemy entities specifically. Enemy entities typically have associated behaviors, such as AI logic or combat,
-/// that can be implemented and updated in game systems.
-///
-/// # Example
-///
-/// To mark an entity as an enemy in a Bevy ECS setup:
-///
-/// ```rust
-/// use bevy::prelude::*;
-///
-/// struct EnemyPlugin;
-///
-/// impl Plugin for EnemyPlugin {
-///     fn build(&self, app: &mut App) {
-///         app.add_systems(StartUp, setup_enemy);
-///     }
-/// }
-///
-/// fn setup_enemy(mut commands: Commands) {
-///     commands.spawn().insert(Enemy);
-/// }
-/// ```
 #[derive(Component)]
 pub struct Enemy {
     pub xp: f32,
@@ -37,42 +12,6 @@ impl Default for Enemy {
     }
 }
 
-/// Component representing the movement behavior for horde entities in the game.
-///
-/// The `HordeMover` component is used to define the movement behavior for horde entities. It contains a `dxdy` field
-/// of type `Vec3`, which represents the movement direction in three dimensions (X, Y, and Z). The `noise` method can be
-/// used to introduce random noise to the movement direction.
-///
-/// # Fields
-///
-/// - `dxdy`: A `Vec3` representing the movement direction of the horde entity.
-///
-/// # Default Implementation
-///
-/// By default, the `HordeMover` component is created with a zeroed movement direction.
-///
-/// # Example
-///
-/// To create a `HordeMover` component for a horde entity with random noise applied to its movement direction:
-///
-/// ```rust
-/// use bevy::prelude::*;
-///
-/// struct HordePlugin;
-///
-/// impl Plugin for HordePlugin {
-///     fn build(&self, app: &mut App) {
-///         app.add_systems(StartUp, setup_horde_entity);
-///     }
-/// }
-///
-/// fn setup_horde_entity(mut commands: Commands) {
-///     let mut mover = HordeMover::default();
-///     mover.noise(); // Introduce random noise to the movement direction
-///
-///     commands.spawn().insert(mover);
-/// }
-/// ```
 #[derive(Component)]
 pub struct HordeMover {
     /// The movement direction of the horde entity.
