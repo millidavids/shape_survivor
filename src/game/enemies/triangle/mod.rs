@@ -13,21 +13,6 @@ use self::systems::{
 pub struct TrianglePlugin;
 
 impl Plugin for TrianglePlugin {
-    /// Implements the Bevy `Plugin` trait for managing triangle enemy entities and their behaviors.
-    ///
-    /// The `build` function initializes and configures the `TrianglePlugin` for use within a Bevy app.
-    ///
-    /// # Parameters
-    ///
-    /// - `app`: A mutable reference to the Bevy app where this plugin is added.
-    ///
-    /// # See Also
-    ///
-    /// - [`Plugin`](https://bevyengine.github.io/bevy/bevy/app/trait.Plugin.html): Bevy trait for defining plugins.
-    /// - [`animate_triangle`](fn.animate_triangle.html): Bevy system for animating triangle enemies.
-    /// - [`spawn_triangles`](fn.spawn_triangles.html): Bevy system for spawning new triangle enemies.
-    /// - [`move_triangle`](fn.move_triangle.html): Bevy system for updating triangle enemy movements.
-    /// - [`despawn_triangles`](fn.despawn_triangles.html): Bevy system for despawning unnecessary triangle enemies.
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,

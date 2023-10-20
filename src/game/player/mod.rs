@@ -1,4 +1,4 @@
-mod abilities;
+pub mod abilities;
 pub mod components;
 pub mod events;
 mod systems;
@@ -9,11 +9,8 @@ use crate::states::AppState;
 
 use self::{
     abilities::AbilitiesPlugin,
-    events::{AddPlayerXpEvent, PlayerLevelUpEvent},
-    systems::{
-        add_xp, animate_player, camera_follow, check_level, despawn_player, move_player,
-        spawn_player,
-    },
+    events::PlayerLevelUpEvent,
+    systems::{add_xp, animate_player, camera_follow, despawn_player, move_player, spawn_player},
 };
 
 use super::states::GameState;
@@ -27,17 +24,12 @@ impl Plugin for PlayerPlugin {
     ///
     /// * `app`: The Bevy app builder used to register the systems.
     fn build(&self, app: &mut App) {
-        app.add_event::<AddPlayerXpEvent>()
-            .add_event::<PlayerLevelUpEvent>()
+        app.add_event::<PlayerLevelUpEvent>()
             .add_plugins(AbilitiesPlugin)
             .add_systems(OnEnter(AppState::Game), spawn_player)
             .add_systems(
                 Update,
-                (
-                    animate_player,
-                    (move_player, camera_follow).chain(),
-                    (add_xp, check_level).chain(),
-                )
+                (animate_player, (move_player, camera_follow).chain(), add_xp)
                     .run_if(in_state(GameState::Running)),
             )
             .add_systems(OnExit(AppState::Game), despawn_player);

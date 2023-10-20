@@ -3,6 +3,11 @@ use bevy::prelude::{Component, Vec3};
 use super::DEFAULT_ABILITY_SPEED;
 
 #[derive(Component)]
+pub struct Ability {
+    pub damage: f32,
+}
+
+#[derive(Component)]
 pub struct Projectile {
     pub speed: f32,
     pub direction: Vec3,

@@ -5,11 +5,14 @@ use bevy::{
 use rand::seq::IteratorRandom;
 
 use crate::game::{
-    components::Health,
     enemies::components::Enemy,
     grid::{GRID_HEIGHT, GRID_WIDTH},
     player::{
-        abilities::{components::Projectile, DEFAULT_ABILITY_SPEED},
+        abilities::{
+            components::{Ability, Projectile},
+            events::TransmitDamage,
+            DEFAULT_ABILITY_SPEED,
+        },
         components::Player,
     },
 };
@@ -31,6 +34,7 @@ pub fn spawn_dot(
                     speed: DEFAULT_ABILITY_SPEED,
                     direction: player_transform.translation - random_enemy_transform.translation,
                 },
+                Ability { damage: 100.0 },
                 MaterialMesh2dBundle {
                     mesh: meshes
                         .add(shape::Circle::new(DEFAULT_DOT_RADIUS).into())
@@ -67,12 +71,13 @@ pub fn move_dots(mut dots_query: Query<(&mut Transform, &Projectile), With<Dot>>
 }
 pub fn enemy_impact(
     mut commands: Commands,
-    mut enemies_query: Query<(&mut Health, &Transform, &Handle<TextureAtlas>), With<Enemy>>,
-    dots_query: Query<(Entity, &Transform), With<Dot>>,
+    mut enemies_query: Query<(Entity, &Transform, &Handle<TextureAtlas>), With<Enemy>>,
+    dots_query: Query<(Entity, &Transform, &Ability), With<Dot>>,
     texture_atlases: Res<Assets<TextureAtlas>>,
+    mut transmit_damage_event_writer: EventWriter<TransmitDamage>,
 ) {
-    for (dot_entity, dot_transform) in &dots_query {
-        for (mut enemy_health, enemy_transform, enemy_texture_atlas) in &mut enemies_query {
+    for (dot_entity, dot_transform, dot_ability) in &dots_query {
+        for (enemy_entity, enemy_transform, enemy_texture_atlas) in &mut enemies_query {
             if collide(
                 dot_transform.translation,
                 Vec2::splat(DEFAULT_DOT_RADIUS * 2.0),
@@ -81,7 +86,7 @@ pub fn enemy_impact(
             ) != None
             {
                 commands.entity(dot_entity).despawn_recursive();
-                enemy_health.0 -= 100.0;
+                transmit_damage_event_writer.send(TransmitDamage {target: enemy_entity, damage: dot_ability.damage });
             }
         }
     }
