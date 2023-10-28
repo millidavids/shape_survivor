@@ -14,28 +14,28 @@ use super::{
 pub fn spawn_experience(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
+    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
     mut experience_spawn_event_reader: EventReader<ExperienceSpawnEvent>,
+
 ) {
     for event in &mut experience_spawn_event_reader {
         let xp = Experience::generate();
+        let texture_handle = asset_server.load(format!("sprites/{}_experience_4_frame_64x64.png", xp.to_string()));
+        let texture_atlas =
+            TextureAtlas::from_grid(texture_handle, Vec2::new(64.0, 64.0), 4, 1, None, None);
+        let texture_atlas_handle = texture_atlases.add(texture_atlas);
         let animation_indices = AnimationIndices {
-            first: 1,
-            last: 4,
+            first: 0,
+            last: 3,
             reverse: false,
         };
 
         commands.spawn((
             Drop {},
             xp,
-            Text2dBundle {
-                text: Text::from_section(
-                    xp.to_string(),
-                    TextStyle {
-                        font: asset_server.load("fonts/Davidfont.otf"),
-                        font_size: 64.0,
-                        color: Color::BLACK,
-                    },
-                ),
+            SpriteSheetBundle {
+                texture_atlas: texture_atlas_handle,
+                sprite: TextureAtlasSprite::new(animation_indices.first),
                 transform: event.0,
                 ..default()
             },
@@ -45,19 +45,14 @@ pub fn spawn_experience(
     }
 }
 
-pub fn animate_experience(
-    time: Res<Time>,
+pub fn pulse_experience(
     mut query: Query<
-        (&mut AnimationIndices, &mut AnimationTimer, &mut Transform),
+        (&TextureAtlasSprite, &mut Transform),
         With<Experience>,
     >,
 ) {
-    for (mut indices, mut timer, mut transform) in &mut query {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            transform.scale =
-                Vec3::splat(indices.tick(&((transform.scale.x * 4.0) as usize)) as f32 * 0.25);
-        }
+    for (sprite, mut transform) in &mut query {
+        transform.scale = Vec3::splat(sprite.index as f32 * 0.05 + 0.2);
     }
 }
 

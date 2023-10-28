@@ -6,7 +6,7 @@ use bevy::prelude::*;
 use crate::{game::states::GameState, states::AppState};
 
 use self::systems::{
-    animate_triangle, avoid_other_triangles, despawn_triangles, direction_to_player, move_triangle,
+    avoid_other_triangles, despawn_triangles, direction_to_player, move_triangle,
     spawn_triangles,
 };
 
@@ -17,7 +17,6 @@ impl Plugin for TrianglePlugin {
         app.add_systems(
             Update,
             (
-                animate_triangle,
                 spawn_triangles,
                 (direction_to_player, avoid_other_triangles, move_triangle).chain(),
             )

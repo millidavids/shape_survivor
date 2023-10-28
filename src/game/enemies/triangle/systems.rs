@@ -75,25 +75,6 @@ pub fn despawn_triangles(player_query: Query<Entity, With<Triangle>>, mut comman
     }
 }
 
-pub fn animate_triangle(
-    time: Res<Time>,
-    mut query: Query<
-        (
-            &mut AnimationIndices,
-            &mut AnimationTimer,
-            &mut TextureAtlasSprite,
-        ),
-        With<Triangle>,
-    >,
-) {
-    for (mut indices, mut timer, mut sprite) in &mut query {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            sprite.index = indices.tick(&sprite.index);
-        }
-    }
-}
-
 pub fn direction_to_player(
     mut triangle_query: Query<(&Transform, &mut HordeMover), (With<Triangle>, Without<Player>)>,
     player_query: Query<&Transform, (With<Player>, Without<Triangle>)>,

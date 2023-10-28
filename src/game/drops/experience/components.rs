@@ -25,9 +25,9 @@ impl Experience {
 impl Display for Experience {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Experience::X => write!(f, "X"),
-            Experience::Y => write!(f, "Y"),
-            Experience::Z => write!(f, "Z"),
+            Experience::X => write!(f, "x"),
+            Experience::Y => write!(f, "y"),
+            Experience::Z => write!(f, "z"),
         }
     }
 }

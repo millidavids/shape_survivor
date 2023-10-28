@@ -51,25 +51,6 @@ pub fn despawn_player(player_query: Query<Entity, With<Player>>, mut commands: C
     }
 }
 
-pub fn animate_player(
-    time: Res<Time>,
-    mut query: Query<
-        (
-            &mut AnimationIndices,
-            &mut AnimationTimer,
-            &mut TextureAtlasSprite,
-        ),
-        With<Player>,
-    >,
-) {
-    for (mut indices, mut timer, mut sprite) in &mut query {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            sprite.index = indices.tick(&sprite.index);
-        }
-    }
-}
-
 pub fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
     mut player_query: Query<&mut Transform, With<Player>>,

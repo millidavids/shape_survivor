@@ -8,7 +8,7 @@ use crate::game::states::GameState;
 
 use self::{
     events::{ExperienceSpawnEvent, SendExperienceEvent},
-    systems::{animate_experience, player_collect, spawn_experience},
+    systems::{player_collect, spawn_experience, pulse_experience},
 };
 
 pub struct ExperiencePlugin;
@@ -19,7 +19,7 @@ impl Plugin for ExperiencePlugin {
             .add_event::<SendExperienceEvent>()
             .add_systems(
             Update,
-            (spawn_experience, animate_experience, player_collect)
+            (spawn_experience, pulse_experience, player_collect)
                 .run_if(in_state(GameState::Running)),
         );
     }
