@@ -5,7 +5,7 @@ use super::{components::*, events::PlayerLevelUpEvent, PLAYER_SPEED};
 
 use crate::game::{
     components::{AnimationIndices, AnimationTimer},
-    enemies::events::EnemyDeathEvent,
+    drops::experience::events::SendExperienceEvent,
 };
 
 pub fn spawn_player(
@@ -28,6 +28,7 @@ pub fn spawn_player(
 
     commands.spawn((
         Player::default(),
+        Name::from("Player"),
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
@@ -111,12 +112,12 @@ pub fn camera_follow(
 }
 
 pub fn add_xp(
-    mut enemy_death_event_reader: EventReader<EnemyDeathEvent>,
+    mut send_experience_event_reader: EventReader<SendExperienceEvent>,
     mut player_level_up_event_writer: EventWriter<PlayerLevelUpEvent>,
     mut player_query: Query<&mut Player>,
 ) {
     if let Ok(mut player) = player_query.get_single_mut() {
-        let xp: f32 = enemy_death_event_reader.iter().map(|e| e.0).sum();
+        let xp: f32 = send_experience_event_reader.iter().map(|e| e.0).sum();
         player.xp.0 += xp;
         if player.xp.0 >= player.xp.1 {
             player_level_up_event_writer.send(PlayerLevelUpEvent);

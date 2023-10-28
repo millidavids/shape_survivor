@@ -21,25 +21,6 @@ pub const GRID_HEIGHT: u32 = GRID_SMALL_BOX_LENGTH * NUM_SMALL_BOX_HEIGHT;
 pub struct GridPlugin;
 
 impl Plugin for GridPlugin {
-    /// Configures the app to use the `GridPlugin`.
-    ///
-    /// # Parameters:
-    /// * `app`: A mutable reference to the Bevy App.
-    ///
-    /// This function binds the `spawn_grid` system to execute when the game state enters `AppState::Game`.
-    /// Additionally, it binds the `despawn_grid` system to execute when the game state exits `AppState::Game`.
-    ///
-    /// # Example:
-    /// ```rust
-    /// # use bevy::prelude::*;
-    ///
-    /// # fn main() {
-    /// let mut app = App::build();
-    ///
-    /// // Configures the app to use the GridPlugin.
-    /// app.add_plugins(GridPlugin);
-    /// # }
-    /// ```
     fn build(&self, app: &mut App) {
         app.add_systems(OnEnter(AppState::Game), spawn_grid)
             .add_systems(OnExit(AppState::Game), despawn_grid);

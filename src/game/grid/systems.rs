@@ -24,6 +24,7 @@ pub fn spawn_grid(mut commands: Commands) {
                 ..default()
             },
             Grid {},
+            Name::from("Grid"),
         ))
         .with_children(|parent| {
             for i in 0..=NUM_SMALL_BOX_WIDTH {

@@ -2,15 +2,7 @@ use bevy::prelude::*;
 use rand::Rng;
 
 #[derive(Component)]
-pub struct Enemy {
-    pub xp: f32,
-}
-
-impl Default for Enemy {
-    fn default() -> Self {
-        Enemy { xp: 1.0 }
-    }
-}
+pub struct Enemy;
 
 #[derive(Component)]
 pub struct HordeMover {

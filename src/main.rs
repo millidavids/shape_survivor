@@ -4,6 +4,7 @@ mod states;
 mod systems;
 
 use bevy::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use game::GamePlugin;
 use main_menu::MainMenuPlugin;
 use states::AppState;
@@ -18,6 +19,7 @@ fn main() {
             alpha: 1.0,
         }))
         .add_plugins(DefaultPlugins)
+        .add_plugins(WorldInspectorPlugin::new())
         .add_state::<AppState>()
         .add_plugins(MainMenuPlugin)
         .add_plugins(GamePlugin)

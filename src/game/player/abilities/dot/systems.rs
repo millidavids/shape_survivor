@@ -30,6 +30,7 @@ pub fn spawn_dot(
         if let Some(random_enemy_transform) = enemy_query.iter().choose(&mut rand::thread_rng()) {
             commands.spawn((
                 Dot {},
+                Name::from("Dot"),
                 Projectile {
                     speed: DEFAULT_ABILITY_SPEED,
                     direction: player_transform.translation - random_enemy_transform.translation,

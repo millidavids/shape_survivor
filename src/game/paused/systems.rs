@@ -17,6 +17,7 @@ pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
                 ..default()
             },
             PauseMenu {},
+            Name::from("Pause Menu"),
         ))
         .with_children(|parent| {
             // ---- Play Button ----

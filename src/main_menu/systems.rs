@@ -18,6 +18,7 @@ pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..default()
             },
             MainMenu {},
+            Name::from("Main Menu"),
         ))
         .with_children(|parent| {
             // ---- Play Button ----

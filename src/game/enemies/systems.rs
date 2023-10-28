@@ -1,18 +1,21 @@
 use bevy::prelude::*;
 
-use crate::game::{components::Health, player::abilities::events::TransmitDamage};
+use crate::game::{
+    components::Health, drops::experience::events::ExperienceSpawnEvent,
+    player::abilities::events::TransmitDamage,
+};
 
-use super::{components::Enemy, events::EnemyDeathEvent};
+use super::components::Enemy;
 
 pub fn check_health(
     mut commands: Commands,
-    enemies_query: Query<(Entity, &Health, &Enemy)>,
-    mut enemy_death_event_writer: EventWriter<EnemyDeathEvent>,
+    enemies_query: Query<(Entity, &Health, &Transform)>,
+    mut experience_spawn_event_writer: EventWriter<ExperienceSpawnEvent>,
 ) {
-    for (entity, health, enemy) in &enemies_query {
+    for (entity, health, transform) in &enemies_query {
         if health.0 <= 0.0 {
-            enemy_death_event_writer.send(EnemyDeathEvent(enemy.xp));
             commands.entity(entity).despawn_recursive();
+            experience_spawn_event_writer.send(ExperienceSpawnEvent(*transform))
         }
     }
 }

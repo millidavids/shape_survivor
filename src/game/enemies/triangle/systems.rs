@@ -42,7 +42,8 @@ pub fn spawn_triangles(
                 let (y, x) = angle.sin_cos();
                 commands.spawn((
                     Triangle {},
-                    Enemy::default(),
+                    Name::from("Triangle"),
+                    Enemy {},
                     Health(100.0),
                     HordeMover::default(),
                     SpriteSheetBundle {
