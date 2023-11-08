@@ -10,6 +10,7 @@ impl Player {
     pub fn level_up(&mut self) {
         self.lv += 1;
         self.xp.1 *= 1.5;
+        self.xp.0 = 0.0;
     }
 }
 

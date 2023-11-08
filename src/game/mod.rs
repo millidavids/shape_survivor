@@ -6,6 +6,7 @@ mod paused;
 mod player;
 mod states;
 mod systems;
+mod ui;
 
 use bevy::prelude::*;
 
@@ -18,7 +19,7 @@ use self::{
     paused::PausedPlugin,
     player::PlayerPlugin,
     states::GameState,
-    systems::{animate_sprites, deactivate_game, pause_game, toggle_game_state},
+    systems::{animate_sprites, deactivate_game, pause_game, toggle_game_state}, ui::UIPlugin,
 };
 
 pub struct GamePlugin;
@@ -32,6 +33,7 @@ impl Plugin for GamePlugin {
                 GridPlugin,
                 EnemiesPlugin,
                 DropsPlugin,
+                UIPlugin,
             ))
             .add_systems(OnEnter(AppState::Game), pause_game)
             .add_systems(
