@@ -1,4 +1,4 @@
 use bevy::prelude::Event;
 
 #[derive(Event)]
-pub struct PlayerLevelUpEvent;
+pub struct PlayerLevelUpEvent(pub usize);

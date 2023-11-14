@@ -101,9 +101,8 @@ pub fn add_xp(
         let xp: f32 = send_experience_event_reader.iter().map(|e| e.0).sum();
         player.xp.0 += xp;
         if player.xp.0 >= player.xp.1 {
-            player_level_up_event_writer.send(PlayerLevelUpEvent);
             player.level_up();
-            println!("Level Up: {:?}", player);
+            player_level_up_event_writer.send(PlayerLevelUpEvent(player.lv));
         }
     }
 }

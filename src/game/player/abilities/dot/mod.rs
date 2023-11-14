@@ -21,7 +21,7 @@ impl Plugin for DotPlugin {
                 move_dots,
                 enemy_impact,
                 check_bounds,
-                spawn_dot.run_if(on_timer(Duration::from_millis(1000))),
+                spawn_dot.run_if(on_timer(Duration::from_millis(100))),
             )
                 .run_if(in_state(GameState::Running)),
         )

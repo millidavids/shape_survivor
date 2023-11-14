@@ -6,6 +6,7 @@ pub const PRESSED_BUTTON_COLOR: Color = Color::hsla(125.0, 0.75, 0.5, 1.0);
 
 pub const PAUSE_MENU_STYLE: Style = {
     let mut style = Style::DEFAULT;
+    style.position_type = PositionType::Absolute;
     style.width = Val::Percent(100.0);
     style.height = Val::Percent(100.0);
     style.flex_direction = FlexDirection::Column;

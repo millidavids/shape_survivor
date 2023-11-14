@@ -16,6 +16,6 @@ impl Player {
 
 impl Default for Player {
     fn default() -> Self {
-        Player { xp: (0.0, 2.0), lv: 0 }
+        Player { xp: (0.0, 10.0), lv: 0 }
     }
 }
