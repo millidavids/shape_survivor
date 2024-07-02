@@ -43,7 +43,7 @@ pub fn spawn_triangles(
                 commands.spawn((
                     Triangle {},
                     Name::from("Triangle"),
-                    Enemy {},
+                    Enemy { targetable: false },
                     Health(100.0),
                     HordeMover::default(),
                     SpriteSheetBundle {

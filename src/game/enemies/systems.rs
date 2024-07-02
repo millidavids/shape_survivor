@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use crate::game::{
     components::Health, drops::experience::events::ExperienceSpawnEvent,
     player::abilities::events::TransmitDamage,
+    grid::{GRID_WIDTH, GRID_HEIGHT},
 };
 
 use super::components::Enemy;
@@ -27,6 +28,21 @@ pub fn damage_enemies(
     for event in &mut transmit_damage_event_reader {
         if let Ok(mut health) = enemies_query.get_mut(event.target) {
             health.0 -= event.damage;
+        }
+    }
+}
+
+pub fn update_enemy_targetable(
+    mut enemies_query: Query<(&Transform, &mut Enemy)>,
+) {
+    for (transform, mut enemy) in &mut enemies_query {
+        let x = transform.translation.x;
+        let y = transform.translation.y;
+
+        if x >= 0.0 && x <= GRID_WIDTH as f32 && y >= 0.0 && y <= GRID_HEIGHT as f32 {
+            enemy.targetable = true;
+        } else {
+            enemy.targetable = false;
         }
     }
 }

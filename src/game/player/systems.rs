@@ -1,12 +1,14 @@
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
-use super::{components::*, events::PlayerLevelUpEvent, PLAYER_SPEED};
+use super::{abilities::dot::components::DotMod, components::*, events::PlayerLevelUpEvent, PLAYER_SPEED};
 
 use crate::game::{
     components::{AnimationIndices, AnimationTimer},
     drops::experience::events::SendExperienceEvent,
 };
+
+use std::time::Duration;
 
 pub fn spawn_player(
     mut commands: Commands,
@@ -42,6 +44,9 @@ pub fn spawn_player(
         },
         animation_indices,
         AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
+        DotMod {
+            interval: Duration::from_millis(1000),
+        },
     ));
 }
 

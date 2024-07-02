@@ -7,7 +7,7 @@ use bevy::prelude::*;
 
 use self::{
     events::EnemyDeathEvent,
-    systems::{check_health, damage_enemies},
+    systems::{check_health, damage_enemies, update_enemy_targetable},
     triangle::TrianglePlugin,
 };
 
@@ -25,7 +25,7 @@ impl Plugin for EnemiesPlugin {
             .add_plugins(TrianglePlugin)
             .add_systems(
                 Update,
-                (damage_enemies, check_health)
+                (damage_enemies, check_health, update_enemy_targetable)
                     .chain()
                     .run_if(in_state(GameState::Running)),
             );

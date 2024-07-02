@@ -1,5 +1,5 @@
 mod components;
-mod dot;
+pub mod dot;
 pub mod events;
 
 use bevy::prelude::*;

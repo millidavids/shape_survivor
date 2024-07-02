@@ -13,12 +13,7 @@ use systems::{spawn_camera, toggle_app_state};
 fn main() {
     let mut app = App::new();
 
-    app.insert_resource(ClearColor(Color::Hsla {
-            hue: 56.0,
-            saturation: 0.09,
-            lightness: 0.96,
-            alpha: 1.0,
-        }))
+    app.insert_resource(ClearColor(Color::BLACK))
         .add_plugins(DefaultPlugins)
         .add_state::<AppState>()
         .add_plugins(MainMenuPlugin)

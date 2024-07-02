@@ -1,13 +1,14 @@
-mod components;
+pub mod components;
 mod systems;
 
-use std::time::Duration;
-
-use bevy::{prelude::*, time::common_conditions::on_timer};
+use bevy::prelude::*;
 
 use crate::{game::states::GameState, states::AppState};
 
-use self::systems::{check_bounds, despawn_dots, enemy_impact, move_dots, spawn_dot};
+use self::systems::{
+    check_bounds, despawn_dots, enemy_impact, has_dot_mod, move_dots, spawn_dot,
+    spawn_dot_condition,
+};
 
 pub const DEFAULT_DOT_RADIUS: f32 = 2.0;
 
@@ -21,9 +22,10 @@ impl Plugin for DotPlugin {
                 move_dots,
                 enemy_impact,
                 check_bounds,
-                spawn_dot.run_if(on_timer(Duration::from_millis(100))),
+                spawn_dot.run_if(spawn_dot_condition),
             )
-                .run_if(in_state(GameState::Running)),
+                .run_if(in_state(GameState::Running))
+                .run_if(has_dot_mod),
         )
         .add_systems(OnExit(AppState::Game), despawn_dots);
     }

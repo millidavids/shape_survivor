@@ -2,7 +2,9 @@ use bevy::prelude::*;
 use rand::Rng;
 
 #[derive(Component)]
-pub struct Enemy;
+pub struct Enemy {
+    pub targetable: bool,
+}
 
 #[derive(Component)]
 pub struct HordeMover {

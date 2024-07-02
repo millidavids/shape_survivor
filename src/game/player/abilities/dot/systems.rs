@@ -1,3 +1,5 @@
+use crate::game::player::abilities::dot::components::DotMod;
+use crate::game::player::components::Player;
 use bevy::{
     prelude::*,
     sprite::{collide_aabb::collide, MaterialMesh2dBundle},
@@ -7,13 +9,10 @@ use rand::seq::IteratorRandom;
 use crate::game::{
     enemies::components::Enemy,
     grid::{GRID_HEIGHT, GRID_WIDTH},
-    player::{
-        abilities::{
-            components::{Ability, Projectile},
-            events::TransmitDamage,
-            DEFAULT_ABILITY_SPEED,
-        },
-        components::Player,
+    player::abilities::{
+        components::{Ability, Projectile},
+        events::TransmitDamage,
+        DEFAULT_ABILITY_SPEED,
     },
 };
 
@@ -24,10 +23,14 @@ pub fn spawn_dot(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
     player_query: Query<&Transform, With<Player>>,
-    enemy_query: Query<&Transform, With<Enemy>>,
+    enemy_query: Query<(&Transform, &Enemy), With<Enemy>>,
 ) {
     if let Ok(player_transform) = player_query.get_single() {
-        if let Some(random_enemy_transform) = enemy_query.iter().choose(&mut rand::thread_rng()) {
+        if let Some((random_enemy_transform, _)) = enemy_query
+            .iter()
+            .filter(|(_, enemy)| enemy.targetable)
+            .choose(&mut rand::thread_rng())
+        {
             commands.spawn((
                 Dot {},
                 Name::from("Dot"),
@@ -87,7 +90,10 @@ pub fn enemy_impact(
             ) != None
             {
                 commands.entity(dot_entity).despawn_recursive();
-                transmit_damage_event_writer.send(TransmitDamage {target: enemy_entity, damage: dot_ability.damage });
+                transmit_damage_event_writer.send(TransmitDamage {
+                    target: enemy_entity,
+                    damage: dot_ability.damage,
+                });
             }
         }
     }
@@ -101,4 +107,30 @@ pub fn check_bounds(mut commands: Commands, dots_query: Query<(Entity, &Transfor
             commands.entity(entity).despawn_recursive();
         }
     }
+}
+
+pub fn has_dot_mod(player_query: Query<&DotMod, With<Player>>) -> bool {
+    player_query.get_single().is_ok()
+}
+
+pub fn spawn_dot_condition(
+    player_query: Query<&DotMod, With<Player>>,
+    time: Res<Time>,
+    mut last_spawn_time: Local<Option<f32>>,
+) -> bool {
+    if let Ok(dot_mod) = player_query.get_single() {
+        let interval = dot_mod.interval.as_secs_f32();
+        let current_time = time.elapsed_seconds();
+
+        if let Some(last_time) = *last_spawn_time {
+            if current_time - last_time >= interval {
+                *last_spawn_time = Some(current_time);
+                return true;
+            }
+        } else {
+            *last_spawn_time = Some(current_time);
+            return true;
+        }
+    }
+    return false;
 }
