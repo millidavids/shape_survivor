@@ -4,7 +4,7 @@ use bevy::prelude::*;
 pub struct Player {
     pub xp: (f32, f32),
     pub lv: usize,
-    pub health: f32,
+    pub health: (f32, f32),
 }
 
 impl Player {
@@ -20,7 +20,7 @@ impl Default for Player {
         Player {
             xp: (0.0, 10.0),
             lv: 0,
-            health: 10.0,
+            health: (10.0, 10.0),
         }
     }
 }

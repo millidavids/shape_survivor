@@ -6,7 +6,7 @@ use bevy::prelude::*;
 
 use crate::states::AppState;
 
-use self::systems::{animate_xp_bar, spawn_ui, update_xp_text};
+use self::systems::{animate_xp_bar, animate_health_bar, spawn_ui, update_xp_text};
 
 use super::states::GameState;
 
@@ -17,7 +17,7 @@ impl Plugin for UIPlugin {
         app.add_systems(OnEnter(AppState::Game), spawn_ui)
             .add_systems(
                 Update,
-                (animate_xp_bar, update_xp_text).run_if(in_state(GameState::Running)),
+                (animate_health_bar, animate_xp_bar, update_xp_text).run_if(in_state(GameState::Running)),
             );
     }
 }
