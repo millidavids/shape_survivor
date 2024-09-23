@@ -5,7 +5,7 @@ use super::{abilities::dot::components::DotMod, components::*, events::PlayerLev
 
 use crate::game::{
     components::{AnimationIndices, AnimationTimer},
-    drops::experience::events::SendExperienceEvent,
+    drops::experience::events::SendExperienceEvent, grid::{GRID_HEIGHT, GRID_WIDTH},
 };
 
 use std::time::Duration;
@@ -81,7 +81,14 @@ pub fn move_player(
             direction = direction.normalize();
         }
 
-        player_transform.translation += direction * PLAYER_SPEED * time.delta_seconds();
+        let new_position = player_transform.translation + direction * PLAYER_SPEED * time.delta_seconds();
+
+        // Clamp the player's position within the grid boundaries
+        let clamped_x = new_position.x.clamp(0.0, GRID_WIDTH as f32);
+        let clamped_y = new_position.y.clamp(0.0, GRID_HEIGHT as f32);
+
+        player_transform.translation.x = clamped_x;
+        player_transform.translation.y = clamped_y;
     }
 }
 
