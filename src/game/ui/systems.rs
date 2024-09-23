@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::game::player::{components::Player, events::PlayerLevelUpEvent};
 
-use super::{components::{UI, XPBar, XPText}, styles::{XP_BAR_STYLE, UI_STYLE, get_xp_text, XP_TEXT_STYLE}};
+use super::{components::{XPBar, XPBarContainer, XPText, UI}, styles::{get_xp_text, UI_STYLE, XP_BAR_CONTAINER_STYLE, XP_BAR_STYLE, XP_TEXT_STYLE}};
 
 pub fn spawn_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
@@ -13,8 +13,30 @@ pub fn spawn_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
         UI {},
     ))
     .with_children(|parent| {
-        spawn_xp_bar(parent);
-        spawn_xp_text(parent, &asset_server);
+        spawn_xp_bar(parent, &asset_server);
+    });
+}
+
+fn spawn_xp_bar(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
+    parent.spawn((
+        NodeBundle {
+            style: XP_BAR_CONTAINER_STYLE,
+            background_color: Color::hsla(0.0, 0.0, 1.0, 0.5).into(),
+            border_color: Color::BLACK.into(),
+            ..default()
+        },
+        XPBarContainer {},
+    ))
+    .with_children(|container| {
+        spawn_xp_text(container, asset_server);
+        container.spawn((
+            NodeBundle {
+                style: XP_BAR_STYLE,
+                background_color: Color::CYAN.into(),
+                ..default()
+            },
+            XPBar {},
+        ));
     });
 }
 
@@ -29,37 +51,14 @@ fn spawn_xp_text(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
     ));
 }
 
-fn spawn_xp_bar(parent: &mut ChildBuilder) {
-    parent.spawn((
-        NodeBundle {
-            style: XP_BAR_STYLE,
-            background_color: Color::RED.into(),
-            ..default() 
-        }, 
-        XPBar {},
-    ));
-}
-
 pub fn animate_xp_bar(
     mut xp_bar_query: Query<&mut Style, With<XPBar>>,
     player_query: Query<&Player>,
-    mut player_level_up_event_reader: EventReader<PlayerLevelUpEvent>,
 ) {
     if let Ok(player) = player_query.get_single() {
         if let Ok(mut xp_bar_style) = xp_bar_query.get_single_mut() {
-            if player_level_up_event_reader.iter().count() > 0 {
-                xp_bar_style.width = Val::Percent(0.0);
-            } else {
-                let xp_percent = player.xp.0 / player.xp.1 * 100.0;
-                match xp_bar_style.width {
-                    Val::Percent(value) => {
-                        if value < xp_percent {
-                            xp_bar_style.width = Val::Percent(value + 0.5 + (1.0 - (value / xp_percent)));
-                        }
-                    },
-                    _ => {},
-                }
-            }
+            let xp_percent = player.xp.0 / player.xp.1 * 100.0;
+            xp_bar_style.width = Val::Percent(xp_percent);
         }
     }
 }

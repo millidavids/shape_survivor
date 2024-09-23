@@ -4,7 +4,7 @@ mod states;
 mod systems;
 
 use bevy::prelude::*;
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
+// use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use game::GamePlugin;
 use main_menu::MainMenuPlugin;
 use states::AppState;
@@ -21,9 +21,9 @@ fn main() {
         .add_systems(Startup, spawn_camera)
         .add_systems(Update, toggle_app_state);
 
-    if cfg!(debug_assertions) {
-        app.add_plugins(WorldInspectorPlugin::new());
-    }
+    // if cfg!(debug_assertions) {
+    //     app.add_plugins(WorldInspectorPlugin::new());
+    // }
 
     app.run();
 }

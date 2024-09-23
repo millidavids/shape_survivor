@@ -7,4 +7,7 @@ pub struct UI;
 pub struct XPBar;
 
 #[derive(Component)]
+pub struct XPBarContainer;
+
+#[derive(Component)]
 pub struct XPText;
