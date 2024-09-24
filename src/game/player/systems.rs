@@ -58,12 +58,13 @@ pub fn despawn_player(player_query: Query<Entity, With<Player>>, mut commands: C
 
 pub fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    mut player_query: Query<&mut Transform, With<Player>>,
+    mut player_query: Query<(&mut Transform, &Handle<TextureAtlas>), With<Player>>,
+    texture_atlases: Res<Assets<TextureAtlas>>,
     time: Res<Time>,
 ) {
     let mut direction = Vec3::ZERO;
 
-    if let Ok(mut player_transform) = player_query.get_single_mut() {
+    if let Ok((mut player_transform, texture_atlas_handle)) = player_query.get_single_mut() {
         if keyboard_input.pressed(KeyCode::W) {
             direction.y += 1.0;
         }
@@ -83,9 +84,13 @@ pub fn move_player(
 
         let new_position = player_transform.translation + direction * PLAYER_SPEED * time.delta_seconds();
 
-        // Clamp the player's position within the grid boundaries
-        let clamped_x = new_position.x.clamp(0.0, GRID_WIDTH as f32);
-        let clamped_y = new_position.y.clamp(0.0, GRID_HEIGHT as f32);
+        let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
+        let sprite_size = texture_atlas.size * player_transform.scale.truncate();
+        let half_width = sprite_size.x / 8.0; // I don't know why this is 8.0, but it works
+        let half_height = sprite_size.y / 2.0;
+
+        let clamped_x = new_position.x.clamp(half_width, GRID_WIDTH as f32 - half_width);
+        let clamped_y = new_position.y.clamp(half_height, GRID_HEIGHT as f32 - half_height);
 
         player_transform.translation.x = clamped_x;
         player_transform.translation.y = clamped_y;
