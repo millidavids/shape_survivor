@@ -86,7 +86,7 @@ pub fn move_player(
 
         let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
         let sprite_size = texture_atlas.size * player_transform.scale.truncate();
-        let half_width = sprite_size.x / 8.0; // I think this is because the texture atlas is 4 frames wide.
+        let half_width = sprite_size.x / 2.0 / texture_atlas.size.x * texture_atlas.size.y; // I think this is because the texture atlas is 4 frames wide.
         let half_height = sprite_size.y / 2.0;
 
         let clamped_x = new_position.x.clamp(half_width, GRID_WIDTH as f32 - half_width);
