@@ -103,7 +103,7 @@ pub fn check_bounds(mut commands: Commands, dots_query: Query<(Entity, &Transfor
     for (entity, transform) in &dots_query {
         let x = transform.translation.x;
         let y = transform.translation.y;
-        if x <= 0.0 || x >= GRID_WIDTH as f32 || y <= 0.0 || y >= GRID_HEIGHT as f32 {
+        if x <= -10.0 || x >= (GRID_WIDTH as f32 + 10.0) || y <= -10.0 || y >= (GRID_HEIGHT as f32 + 10.0) {
             commands.entity(entity).despawn_recursive();
         }
     }
