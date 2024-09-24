@@ -13,8 +13,8 @@ use self::{
 
 use super::states::GameState;
 
-pub const ENEMY_STD_SPEED: f32 = 125.0;
-pub const ENEMY_STD_AVOIDANCE: f32 = 0.2;
+pub const ENEMY_STD_SPEED: f32 = 200.0;
+pub const ENEMY_STD_AVOIDANCE: f32 = 0.3;
 pub const ENEMY_STD_SIZE: f32 = 32.0;
 
 pub struct EnemiesPlugin;

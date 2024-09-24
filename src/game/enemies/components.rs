@@ -65,7 +65,7 @@ impl HordeMover {
     /// Adjust the noise range as needed to achieve the desired balance between randomness and controlled movement.
     ///
     pub fn noise(&mut self) {
-        self.dxdy.x = rand::thread_rng().gen_range(-100.0..100.0);
-        self.dxdy.y = rand::thread_rng().gen_range(-100.0..100.0);
+        self.dxdy.x = rand::thread_rng().gen_range(-75.0..75.0);
+        self.dxdy.y = rand::thread_rng().gen_range(-75.0..75.0);
     }
 }

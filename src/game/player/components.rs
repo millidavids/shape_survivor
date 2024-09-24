@@ -16,6 +16,14 @@ impl Player {
         self.xp.1 *= 1.5;
         self.xp.0 = 0.0;
     }
+
+    pub fn take_damage(&mut self, amount: f32) {
+        self.health.0 -= amount;
+        if self.health.0 < 0.0 {
+            self.health.0 = 0.0;
+            // Handle player death here if needed
+        }
+    }
 }
 
 impl Default for Player {

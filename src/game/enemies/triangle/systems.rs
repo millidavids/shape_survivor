@@ -12,6 +12,7 @@ use crate::game::{
 };
 
 use super::components::Triangle;
+use rand::Rng;
 
 pub fn spawn_triangles(
     mut commands: Commands,
@@ -55,8 +56,8 @@ pub fn spawn_triangles(
                             100.0,
                         )
                         .with_scale(Vec3 {
-                            x: 0.5,
-                            y: 0.5,
+                            x: 0.5 * rand::thread_rng().gen_range(0.75..1.0),
+                            y: 0.5 * rand::thread_rng().gen_range(0.75..1.0),
                             z: 1.0,
                         }),
                         ..default()

@@ -10,7 +10,7 @@ use crate::states::AppState;
 use self::{
     abilities::AbilitiesPlugin,
     events::PlayerLevelUpEvent,
-    systems::{add_xp, camera_follow, despawn_player, move_player, spawn_player},
+    systems::{add_xp, camera_follow, despawn_player, move_player, spawn_player, player_enemy_collision},
 };
 
 use super::states::GameState;
@@ -29,7 +29,7 @@ impl Plugin for PlayerPlugin {
             .add_systems(OnEnter(AppState::Game), spawn_player)
             .add_systems(
                 Update,
-                ((move_player, camera_follow).chain(), add_xp)
+                ((move_player, camera_follow).chain(), add_xp, player_enemy_collision)
                     .run_if(in_state(GameState::Running)),
             )
             .add_systems(OnExit(AppState::Game), despawn_player);

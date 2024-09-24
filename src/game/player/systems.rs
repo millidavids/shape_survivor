@@ -6,6 +6,7 @@ use super::{abilities::dot::components::DotMod, components::*, events::PlayerLev
 use crate::game::{
     components::{AnimationIndices, AnimationTimer},
     drops::experience::events::SendExperienceEvent, grid::{GRID_HEIGHT, GRID_WIDTH},
+    enemies::components::Enemy,
 };
 
 use std::time::Duration;
@@ -120,6 +121,23 @@ pub fn add_xp(
         if player.xp.0 >= player.xp.1 {
             player.level_up();
             player_level_up_event_writer.send(PlayerLevelUpEvent(player.lv));
+        }
+    }
+}
+
+pub fn player_enemy_collision(
+    mut player_query: Query<(&Transform, &mut Player)>,
+    enemy_query: Query<&Transform, With<Enemy>>,
+    time: Res<Time>,
+) {
+    if let Ok((player_transform, mut player)) = player_query.get_single_mut() {
+        for enemy_transform in enemy_query.iter() {
+            let distance = player_transform.translation.distance(enemy_transform.translation);
+            
+            // Adjust this value based on your game's scale and desired collision range
+            if distance < 32.0 {
+                player.take_damage(5.0 * time.delta_seconds());
+            }
         }
     }
 }
