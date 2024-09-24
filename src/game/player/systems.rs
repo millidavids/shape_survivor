@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
-use super::{abilities::dot::components::DotMod, components::*, events::PlayerLevelUpEvent, PLAYER_SPEED};
+use super::{abilities::dot::components::DotMod, components::*, events::PlayerLevelUpEvent};
 
 use crate::game::{
     components::{AnimationIndices, AnimationTimer},
@@ -58,13 +58,13 @@ pub fn despawn_player(player_query: Query<Entity, With<Player>>, mut commands: C
 
 pub fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
-    mut player_query: Query<(&mut Transform, &Handle<TextureAtlas>), With<Player>>,
+    mut player_query: Query<(&mut Transform, &Handle<TextureAtlas>, &Player), With<Player>>,
     texture_atlases: Res<Assets<TextureAtlas>>,
     time: Res<Time>,
 ) {
     let mut direction = Vec3::ZERO;
 
-    if let Ok((mut player_transform, texture_atlas_handle)) = player_query.get_single_mut() {
+    if let Ok((mut player_transform, texture_atlas_handle, player)) = player_query.get_single_mut() {
         if keyboard_input.pressed(KeyCode::W) {
             direction.y += 1.0;
         }
@@ -82,11 +82,11 @@ pub fn move_player(
             direction = direction.normalize();
         }
 
-        let new_position = player_transform.translation + direction * PLAYER_SPEED * time.delta_seconds();
+        let new_position = player_transform.translation + direction * player.speed * time.delta_seconds();
 
         let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
         let sprite_size = texture_atlas.size * player_transform.scale.truncate();
-        let half_width = sprite_size.x / 8.0; // I don't know why this is 8.0, but it works
+        let half_width = sprite_size.x / 8.0; // I think this is because the texture atlas is 4 frames wide.
         let half_height = sprite_size.y / 2.0;
 
         let clamped_x = new_position.x.clamp(half_width, GRID_WIDTH as f32 - half_width);

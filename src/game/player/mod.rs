@@ -15,7 +15,7 @@ use self::{
 
 use super::states::GameState;
 
-pub const PLAYER_SPEED: f32 = 250.0;
+pub const DEFAULT_PLAYER_SPEED: f32 = 250.0;
 
 pub struct PlayerPlugin;
 

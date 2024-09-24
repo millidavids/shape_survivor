@@ -1,10 +1,13 @@
 use bevy::prelude::*;
 
+use super::DEFAULT_PLAYER_SPEED;
+
 #[derive(Component, Debug)]
 pub struct Player {
     pub xp: (f32, f32),
     pub lv: usize,
     pub health: (f32, f32),
+    pub speed: f32,
 }
 
 impl Player {
@@ -21,6 +24,7 @@ impl Default for Player {
             xp: (0.0, 10.0),
             lv: 0,
             health: (10.0, 10.0),
+            speed: DEFAULT_PLAYER_SPEED,
         }
     }
 }
