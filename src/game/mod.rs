@@ -4,6 +4,7 @@ mod enemies;
 mod grid;
 mod paused;
 mod player;
+mod resources;
 mod states;
 mod systems;
 mod ui;
@@ -11,7 +12,6 @@ mod ui;
 use bevy::prelude::*;
 
 use crate::{states::AppState, systems::push_main_menu};
-
 use self::{
     drops::DropsPlugin,
     enemies::EnemiesPlugin,
@@ -20,13 +20,15 @@ use self::{
     player::PlayerPlugin,
     states::GameState,
     systems::{animate_sprites, deactivate_game, pause_game, toggle_game_state}, ui::UIPlugin,
+    resources::GameStatus,
 };
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_state::<GameState>()
+        app.init_resource::<GameStatus>()
+            .add_state::<GameState>()
             .add_plugins((
                 PausedPlugin,
                 PlayerPlugin,
