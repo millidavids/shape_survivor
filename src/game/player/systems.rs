@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy::window::PrimaryWindow;
 
 use super::{abilities::dot::components::DotMod, components::*, events::PlayerLevelUpEvent};
 
@@ -15,10 +14,7 @@ pub fn spawn_player(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
-    window_query: Query<&Window, With<PrimaryWindow>>,
 ) {
-    let window = window_query.get_single().unwrap();
-
     let texture_handle = asset_server.load("sprites/circle_player_4_frame_64x64.png");
     let texture_atlas =
         TextureAtlas::from_grid(texture_handle, Vec2::new(64.0, 64.0), 4, 1, None, None);
@@ -35,7 +31,7 @@ pub fn spawn_player(
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
-            transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 100.0)
+            transform: Transform::from_xyz(GRID_WIDTH as f32 / 2.0, GRID_HEIGHT as f32 / 2.0, 100.0)
                 .with_scale(Vec3 {
                     x: 0.5,
                     y: 0.5,
