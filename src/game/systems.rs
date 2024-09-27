@@ -12,12 +12,13 @@ pub fn toggle_game_state(
             GameState::Running => next_game_state.set(GameState::Paused),
             GameState::Paused => next_game_state.set(GameState::Running),
             GameState::Inactive => next_game_state.set(GameState::Paused),
+            GameState::NewGame => next_game_state.set(GameState::Running),
         }
     }
 }
 
-pub fn pause_game(mut next_game_state: ResMut<NextState<GameState>>) {
-    next_game_state.set(GameState::Paused);
+pub fn new_game(mut next_game_state: ResMut<NextState<GameState>>) {
+    next_game_state.set(GameState::NewGame);
 }
 
 pub fn deactivate_game(mut next_game_state: ResMut<NextState<GameState>>) {

@@ -29,9 +29,14 @@ impl Plugin for PausedPlugin {
             spawn_pause_menu.run_if(in_state(AppState::Game)),
         )
         .add_systems(
-            Update,
-            (button_interaction).run_if(in_state(GameState::Paused)),
+            OnEnter(GameState::NewGame),
+            spawn_pause_menu.run_if(in_state(AppState::Game)),
         )
-        .add_systems(OnExit(GameState::Paused), despawn_pause_menu);
+        .add_systems(
+            Update,
+            (button_interaction).run_if(in_state(GameState::Paused).or_else(in_state(GameState::NewGame))),
+        )
+        .add_systems(OnExit(GameState::Paused), despawn_pause_menu)
+        .add_systems(OnExit(GameState::NewGame), despawn_pause_menu);
     }
 }

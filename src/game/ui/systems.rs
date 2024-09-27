@@ -25,6 +25,12 @@ pub fn spawn_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
         });
 }
 
+pub fn despawn_ui(mut commands: Commands, ui_query: Query<Entity, With<UI>>) {
+    if let Ok(ui) = ui_query.get_single() {
+        commands.entity(ui).despawn_recursive();
+    }
+}
+
 fn spawn_xp_bar(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
     parent
         .spawn((

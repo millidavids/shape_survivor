@@ -8,7 +8,16 @@ use super::styles::{
     PAUSE_MENU_STYLE, PAUSE_MENU_TRANSFORM, PRESSED_BUTTON_COLOR,
 };
 
-pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn spawn_pause_menu(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    game_state: Res<State<GameState>>,
+) {
+    let resume_start_text = match game_state.get() {
+        GameState::NewGame => "Start",
+        _ => "Resume",
+    };
+    
     commands
         .spawn((
             NodeBundle {
@@ -32,7 +41,7 @@ pub fn spawn_pause_menu(mut commands: Commands, asset_server: Res<AssetServer>) 
                 ))
                 .with_children(|parent| {
                     parent.spawn(TextBundle {
-                        text: get_button_text(&asset_server, "Resume"),
+                        text: get_button_text(&asset_server, resume_start_text),
                         ..default()
                     });
                 });

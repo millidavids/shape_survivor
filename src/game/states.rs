@@ -4,6 +4,7 @@ use bevy::prelude::*;
 pub enum GameState {
     #[default]
     Inactive,
+    NewGame,
     Paused,
     Running,
 }

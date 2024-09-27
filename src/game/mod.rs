@@ -19,7 +19,7 @@ use self::{
     paused::PausedPlugin,
     player::PlayerPlugin,
     states::GameState,
-    systems::{animate_sprites, deactivate_game, pause_game, toggle_game_state}, ui::UIPlugin,
+    systems::{animate_sprites, deactivate_game, new_game, toggle_game_state}, ui::UIPlugin,
 };
 
 pub struct GamePlugin;
@@ -35,7 +35,7 @@ impl Plugin for GamePlugin {
                 DropsPlugin,
                 UIPlugin,
             ))
-            .add_systems(OnEnter(AppState::Game), pause_game)
+            .add_systems(OnEnter(AppState::Game), new_game)
             .add_systems(
                 Update,
                 (
