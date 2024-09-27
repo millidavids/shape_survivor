@@ -19,7 +19,7 @@ use self::{
     paused::PausedPlugin,
     player::PlayerPlugin,
     states::GameState,
-    systems::{animate_sprites, deactivate_game, new_game, toggle_game_state}, ui::UIPlugin,
+    systems::{animate_sprites, deactivate_game, new_game, toggle_game_state, handle_player_level_up}, ui::UIPlugin,
 };
 
 pub struct GamePlugin;
@@ -40,7 +40,7 @@ impl Plugin for GamePlugin {
                 Update,
                 (
                     toggle_game_state.run_if(in_state(AppState::Game)),
-                    animate_sprites.run_if(in_state(GameState::Running)),
+                    (animate_sprites, handle_player_level_up).run_if(in_state(GameState::Running)),
                 ),
             )
             .add_systems(OnEnter(GameState::Inactive), push_main_menu)

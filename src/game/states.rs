@@ -7,4 +7,5 @@ pub enum GameState {
     NewGame,
     Paused,
     Running,
+    LevelUp,
 }
