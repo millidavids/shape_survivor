@@ -6,6 +6,7 @@ use super::components::{PauseMenu, PauseMenuButton};
 use super::styles::{
     get_button_text, HOVERED_BUTTON_COLOR, NORMAL_BUTTON_COLOR, PAUSE_BUTTON_STYLE,
     PAUSE_MENU_STYLE, PAUSE_MENU_TRANSFORM, PRESSED_BUTTON_COLOR,
+    PAUSE_MENU_BACKGROUND_COLOR,
 };
 
 pub fn spawn_pause_menu(
@@ -21,46 +22,62 @@ pub fn spawn_pause_menu(
     commands
         .spawn((
             NodeBundle {
-                style: PAUSE_MENU_STYLE,
-                transform: PAUSE_MENU_TRANSFORM,
+                style: Style {
+                    position_type: PositionType::Absolute,
+                    width: Val::Percent(100.0),
+                    height: Val::Percent(100.0),
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
+                    ..default()
+                },
                 ..default()
             },
-            PauseMenu {},
-            Name::from("Pause Menu"),
+            Name::from("Pause Menu Container"),
         ))
         .with_children(|parent| {
-            // ---- Play Button ----
-            parent
-                .spawn((
-                    ButtonBundle {
-                        style: PAUSE_BUTTON_STYLE,
-                        transform: PAUSE_MENU_TRANSFORM,
-                        ..default()
-                    },
-                    PauseMenuButton::Running,
-                ))
-                .with_children(|parent| {
-                    parent.spawn(TextBundle {
-                        text: get_button_text(&asset_server, resume_start_text),
-                        ..default()
+            parent.spawn((
+                NodeBundle {
+                    style: PAUSE_MENU_STYLE,
+                    background_color: PAUSE_MENU_BACKGROUND_COLOR.into(),
+                    ..default()
+                },
+                PauseMenu {},
+                Name::from("Pause Menu"),
+            ))
+            .with_children(|parent| {
+                // ---- Play Button ----
+                parent
+                    .spawn((
+                        ButtonBundle {
+                            style: PAUSE_BUTTON_STYLE,
+                            transform: PAUSE_MENU_TRANSFORM,
+                            ..default()
+                        },
+                        PauseMenuButton::Running,
+                    ))
+                    .with_children(|parent| {
+                        parent.spawn(TextBundle {
+                            text: get_button_text(&asset_server, resume_start_text),
+                            ..default()
+                        });
                     });
-                });
-            // ---- Quit Button ----
-            parent
-                .spawn((
-                    ButtonBundle {
-                        style: PAUSE_BUTTON_STYLE,
-                        transform: PAUSE_MENU_TRANSFORM,
-                        ..default()
-                    },
-                    PauseMenuButton::MainMenu,
-                ))
-                .with_children(|parent| {
-                    parent.spawn(TextBundle {
-                        text: get_button_text(&asset_server, "Main Menu"),
-                        ..default()
+                // ---- Quit Button ----
+                parent
+                    .spawn((
+                        ButtonBundle {
+                            style: PAUSE_BUTTON_STYLE,
+                            transform: PAUSE_MENU_TRANSFORM,
+                            ..default()
+                        },
+                        PauseMenuButton::MainMenu,
+                    ))
+                    .with_children(|parent| {
+                        parent.spawn(TextBundle {
+                            text: get_button_text(&asset_server, "Main Menu"),
+                            ..default()
+                        });
                     });
-                });
+            });
         });
 }
 

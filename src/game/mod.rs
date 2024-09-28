@@ -4,6 +4,7 @@ mod enemies;
 mod grid;
 mod paused;
 mod player;
+mod levelup;
 mod states;
 mod systems;
 mod ui;
@@ -16,6 +17,7 @@ use self::{
     drops::DropsPlugin,
     enemies::EnemiesPlugin,
     grid::GridPlugin,
+    levelup::LevelUpPlugin,
     paused::PausedPlugin,
     player::PlayerPlugin,
     states::GameState,
@@ -34,6 +36,7 @@ impl Plugin for GamePlugin {
                 EnemiesPlugin,
                 DropsPlugin,
                 UIPlugin,
+                LevelUpPlugin,
             ))
             .add_systems(OnEnter(AppState::Game), new_game)
             .add_systems(
